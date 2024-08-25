@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# You-DO
+”今”やるべきことがわかるタスク管理アプリ
 
-## Getting Started
+# 開発環境
+Node.js: 22.3.0
 
-First, run the development server:
+バージョン管理:asdf
 
 ```bash
+# パッケージインストール
+npm i
+# 開発サーバ起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# ビルド
+npm run build
+# ビルドサーバ起動
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## フォルダ構成
+```
+├ src
+│ ├ app // Next.jsのルーティング
+│ ├ components // コンポーネント
+│ │ ├ features // 特定の機能を実現するコンポーネント
+│ │ │ ├ sample // サンプルコンポーネント
+│ │ │ │ ├ hooks // サンプルコンポーネントのみで使用するhook(不要な場合もある)
+│ │ │ │ ├ logics // サンプルコンポーネントのみで使用するロジック(不要な場合もある)
+│ │ │ │ ├ tests // テスト専用
+│ │ │ │ ├ index.tsx // エントリーポイント
+│ │ ├ functions // UIとして表示されないコンポーネント
+│ │ ├ ui // UIコンポーネント, shadcn/uiは全てここに入る
+│ ├ constants // 全体に共通の定数ファイルを配置する
+│ ├ libs // ライブラリのラッパーや使いまわしやすいようにする
+│ ├ types // 全体に共通の型定義ファイルを配置する
+│ ├ usecases // 共通で使い回すhooks
+│ ├ utils // 使い回すロジックなど
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Gitフォーマットについて
+## コミットメッセージ
+| Prefix  |  詳細  |
+| ------- | ------ |
+| feat:   | 新しい機能の追加 |
+| improve:| 仕様に影響のないコードの変更 |
+| fix:    | バグの修正 |
+| style:  | コードの整形 |
+| chore:  | 新規ライブラリやプラグインの追加 |
+| docs:   | ドキュメントのみの変更 |
+| test:   | テスト関連 |
+| break:  | ロールバック |
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+例：`feat: 〇〇なため、△△を追加`
 
-## Learn More
+## ブランチ名
+ブランチ名は下記のフォーマットで統一すること
 
-To learn more about Next.js, take a look at the following resources:
+`イシュータイトル/イシュー番号`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+例：`login-page/#03`
