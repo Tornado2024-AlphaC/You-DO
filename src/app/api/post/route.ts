@@ -3,7 +3,7 @@ import spabase from "../../../libs/spabase";
 
 export async function GET() {
   try {
-    const { data, error } = await spabase.from("posts").select("*");
+    const { data, error } = await spabase.from("sample-posts").select("*");
     if (error) {
       throw error;
     }
