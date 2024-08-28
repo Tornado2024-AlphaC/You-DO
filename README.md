@@ -19,6 +19,13 @@ npm run build
 npm start
 ```
 
+### バックエンドについて
+
+api の実装は、`app/api/`配下にある。
+
+hello api（動作確認用）へのアクセス先
+URL: `localhost:3000/api/hello`
+
 ## フォルダ構成
 
 ```
