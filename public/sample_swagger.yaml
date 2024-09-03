@@ -1,18 +1,43 @@
 
 openapi: 3.0.0
 info:
-  title: Sample API
-  description: A sample API to demonstrate Swagger YAML
+  title: You-DO API
+  description: You-DOで使用するAPIの仕様書。
   version: 1.0.0
 servers:
   - url: http://localhost:3000/api
+tags:
+  - name: Hello
+    description: APIの動作確認用のエンドポイント。
+  - name: Sample-Post
+    description: Spabaseの動作確認用のエンドポイント。
 paths:
-  /users:
+  /hello:
     get:
-      summary: Get a list of users
+      tags:
+        - Hello
+      summary: Hello API
+      description: APIの動作確認用のエンドポイント。
       responses:
         '200':
-          description: A list of users
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hello Next.js API Routes
+  /sample-post:
+    get:
+      tags:
+        - Sample-Post
+      summary: Sample Post API
+      description: Spabase動作確認用として、仮の投稿データを返すエンドポイント。
+      responses:
+        '200':
+          description: 成功
           content:
             application/json:
               schema:
@@ -23,37 +48,12 @@ paths:
                     id:
                       type: integer
                       example: 1
-                    name:
+                    created_at:
                       type: string
-                      example: John Doe
-                    email:
+                      example: 2021-08-01T00:00:00.000Z
+                    title:
                       type: string
-                      example: john.doe@example.com
-  /users/{id}:
-    get:
-      summary: Get a user by ID
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: A single user
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  name:
-                    type: string
-                    example: John Doe
-                  email:
-                    type: string
-                    example: john.doe@example.com
-        '404':
-          description: User not found
+                      example: サンプルタイトル
+                    body:
+                      type: string
+                      example: サンプル本文
