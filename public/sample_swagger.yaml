@@ -57,3 +57,17 @@ paths:
                     body:
                       type: string
                       example: サンプル本文
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: エラーメッセージ
+    
+        
