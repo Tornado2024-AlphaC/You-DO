@@ -191,7 +191,136 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-
+  /task/list:
+    get:
+      tags:
+        - Task
+      summary:
+        タスク一覧取得
+      description:
+        指定されたユーザーのタスクの一覧を優先度が高い順に取得
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: タスク未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+    post:
+      tags:
+        - Task
+      summary: タスク登録
+      description: 指定されたユーザーのタスク情報を登録するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: タスクタイトル
+                limit_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                parent_id:
+                  type: integer
+                  example: 1
+                available_break:
+                  type: boolean
+                  example: true
+                duration:
+                  type: integer
+                  example: 60
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: '#/components/schemas/Task'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
                 
 
 components:
