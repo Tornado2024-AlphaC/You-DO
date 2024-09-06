@@ -11,6 +11,12 @@ tags:
     description: APIの動作確認用のエンドポイント。
   - name: Sample-Post
     description: Spabaseの動作確認用のエンドポイント。
+  - name: User
+    description: ユーザー情報に関するエンドポイント。
+  - name: Task
+    description: タスク情報に関するエンドポイント。
+  - name: Schedule
+    description: スケジュール情報に関するエンドポイント。
 paths:
   /hello:
     get:
