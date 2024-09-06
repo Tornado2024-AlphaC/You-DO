@@ -63,6 +63,133 @@ paths:
                     body:
                       type: string
                       example: サンプル本文
+  /user:
+    get:
+      tags:
+        - User
+      summary: ユーザー情報取得
+      description: 指定されたユーザーの情報を取得するエンドポイント
+      parameters:
+        - name: uuid
+          in: path
+          description: ユーザーのuuid
+          required: true
+          schema:
+            type: string
+            example: 12345678-1234-1234-1234-123456789012
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        
+
+    post:
+      tags:
+        - User
+      summary: ユーザー登録
+      description: ユーザー情報を登録するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  example: 12345678-1234-1234-1234-123456789012
+                name:
+                  type: string
+                  example: ユーザー名
+                gender:
+                  type: string
+                  example: m
+                birthday:
+                  type: string
+                  example: 2000-01-01T00:00:00.000Z
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+
+                
 
 components:
   schemas:
