@@ -155,6 +155,9 @@ paths:
                 survey_file_name:
                   type: string
                   example: ファイル名
+                image_url:
+                  type: string
+                  example: http://sample-image.com
       responses:
         "200":
           description: 成功
@@ -554,6 +557,12 @@ components:
         survey_file_name:
           type: string
           example: ファイル名
+        task_completed_count:
+          type: integer
+          example: 0
+        image_url:
+          type: string
+          example: http://sample-image.com
         login_at:
           type: string
           example: 2021-08-01T00:00:00.000Z
