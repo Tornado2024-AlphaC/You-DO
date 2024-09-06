@@ -152,6 +152,9 @@ paths:
                 birthday:
                   type: string
                   example: 2000-01-01T00:00:00.000Z
+                survey_file_name:
+                  type: string
+                  example: ファイル名
       responses:
         "200":
           description: 成功
@@ -220,6 +223,9 @@ components:
         birthday:
           type: string
           example: 2000-01-01T00:00:00.000Z
+        survey_file_name:
+          type: string
+          example: ファイル名
         login_at:
           type: string
           example: 2021-08-01T00:00:00.000Z
