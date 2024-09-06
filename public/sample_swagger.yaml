@@ -255,6 +255,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+  /task:
     post:
       tags:
         - Task
@@ -321,6 +322,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+  /task/{id}:
     put:
       tags:
         - Task
