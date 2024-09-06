@@ -191,7 +191,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /task/list:
+  /task/{user_id}/list:
     get:
       tags:
         - Task
