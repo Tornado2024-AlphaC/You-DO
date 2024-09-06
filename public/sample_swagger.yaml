@@ -132,5 +132,29 @@ components:
         updated_at:
           type: string
           example: 2021-08-01T00:00:00.000Z
+    Schedule:
+      properties:
+        id:
+          type: integer
+          example: 0
+        user_id:
+          type: integer
+          example: 0
+        type:
+          type: string
+          example: empty
+        start_time:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        end_time:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        updated_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        created_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+
     
         
