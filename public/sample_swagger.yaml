@@ -322,6 +322,27 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+    put:
+      tags:
+        - Task
+      summary: タスク優先度更新
+      description: 全てのタスクの優先度を更新（再計算）するエンドポイント。
+      responses:
+        "200":
+          description: 成功
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
   /task/{id}:
     get:
       tags:
