@@ -321,6 +321,120 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+    put:
+      tags:
+        - Task
+      summary: タスク更新
+      description: 指定されたIDのタスク情報を更新するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                user_id:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: タスクタイトル
+                limit_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                parent_id:
+                  type: integer
+                  example: 1
+                available_break:
+                  type: boolean
+                  example: true
+                duration:
+                  type: integer
+                  example: 60
+                progress:
+                  type: integer
+                  example: 0
+                priority:
+                  type: integer
+                  example: 1
+                skip_count:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+    delete:
+      tags:
+        - Task
+      summary: タスク削除
+      description: 指定されたIDのタスク情報を削除するエンドポイント。
+      parameters:
+        - name: id
+          in: path
+          description: タスクのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+
                 
 
 components:
