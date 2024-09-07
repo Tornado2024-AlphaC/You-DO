@@ -778,7 +778,131 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-                
+    put:
+      tags:
+        - Schedule
+      summary: スケジュール更新
+      description: 指定されたIDのスケジュール情報を更新するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                user_id:
+                  type: integer
+                  example: 1
+                type:
+                  type: string
+                  example: empty
+                start_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                end_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ"
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /schedule/{id}:
+    delete:
+      tags:
+        - Schedule
+      summary: スケジュール削除
+      description: 指定されたIDのスケジュール情報を削除するエンドポイント。
+      parameters:
+        - name: id
+          in: path
+          description: スケジュールのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
 
 components:
   schemas:
