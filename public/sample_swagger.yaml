@@ -258,6 +258,75 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+  /task/next:
+    get:
+      tags:
+        - Task
+      summary: 今やるべきタスク一覧取得
+      description: 指定されたユーザー、指定された空き時間に対して、今やるべきタスクの一覧を、優先度が高い順に取得するエンドポイント。
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: schedule_id
+          in: query
+          description: スケジュールのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: タスク未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
   /task:
     post:
       tags:
