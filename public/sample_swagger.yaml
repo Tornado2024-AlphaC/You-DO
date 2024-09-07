@@ -522,6 +522,130 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+  /schedule/{user_id}/list:
+    get:
+      tags:
+        - Schedule
+      summary: スケジュール一覧取得
+      description: 指定されたユーザーのスケジュールの一覧を取得するエンドポイント。
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /schedule:
+    post:
+      tags:
+        - Schedule
+      summary: スケジュール登録
+      description: 指定されたユーザーのスケジュール情報を登録するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                type:
+                  type: string
+                  example: empty
+                start_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                end_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: '#/components/schemas/Schedule'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+
 
                 
 
