@@ -325,6 +325,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+  /task/priority:
     put:
       tags:
         - Task
