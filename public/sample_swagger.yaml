@@ -584,6 +584,69 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
+  /schedule/{user_id}/next-empty:
+    get:
+      tags:
+        - Schedule
+      summary: 次の空き時間取得
+      description: 指定されたユーザーの次の空き時間を取得するエンドポイント。
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: '#/components/schemas/Schedule'
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
   /schedule:
     post:
       tags:
@@ -645,8 +708,6 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-
-
                 
 
 components:
