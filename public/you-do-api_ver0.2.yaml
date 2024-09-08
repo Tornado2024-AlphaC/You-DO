@@ -156,6 +156,12 @@ paths:
                 image_url:
                   type: string
                   example: http://sample-image.com
+                params1:
+                  type: integer
+                  example: 0
+                params2:
+                  type: integer
+                  example: 0
       responses:
         "200":
           description: 成功
@@ -938,6 +944,12 @@ components:
         image_url:
           type: string
           example: http://sample-image.com
+        params1:
+          type: integer
+          example: 0
+        params2:
+          type: integer
+          example: 0
         login_at:
           type: string
           example: 2021-08-01T00:00:00.000Z
