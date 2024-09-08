@@ -357,9 +357,9 @@ paths:
                 available_break:
                   type: boolean
                   example: true
-                duration:
+                expectation:
                   type: integer
-                  example: 60
+                  example: 120
       responses:
         "200":
           description: 成功
@@ -429,6 +429,9 @@ paths:
                 duration:
                   type: integer
                   example: 60
+                expectation:
+                  type: integer
+                  example: 120
                 progress:
                   type: integer
                   example: 0
@@ -980,6 +983,9 @@ components:
         duration:
           type: integer
           example: 60
+        expectation:
+          type: integer
+          example: 120
         progress:
           type: integer
           example: 0
