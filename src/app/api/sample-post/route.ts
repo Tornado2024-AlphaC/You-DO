@@ -14,3 +14,18 @@ export async function GET() {
     throw error;
   }
 }
+
+export async function POST(req:any) {
+  try {
+    const body = await req.json();
+    const {error} = await spabase.from("sample-posts").insert([body]);
+    if (error) {
+      throw error;
+    }
+    return NextResponse.json({
+      message: "Post created successfully",
+    });
+  } catch (error) {
+    throw error;
+  }
+}
