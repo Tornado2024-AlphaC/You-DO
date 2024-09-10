@@ -12,7 +12,7 @@ const ProfileBtn = () => {
 	};
 
 	return (
-		<Button className="p-0 w-[78px] h-[78px]" onClick={handleRoute}>
+		<Button size={'icon'} onClick={handleRoute}>
 			<Image src={'/icons/profile.svg'} width={36} height={36} alt="profile" />
 		</Button>
 	);
