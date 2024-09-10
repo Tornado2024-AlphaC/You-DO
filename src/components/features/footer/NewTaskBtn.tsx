@@ -1,10 +1,16 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const NewTaskBtn = () => {
+	const router = useRouter();
+
+	const showNewTaskModal = () => {
+		console.log('showNewTaskModal');
+	};
 	return (
-		<Button>
+		<Button onClick={showNewTaskModal}>
 			<Image
 				src={'/icons/plus.svg'}
 				width={20}
