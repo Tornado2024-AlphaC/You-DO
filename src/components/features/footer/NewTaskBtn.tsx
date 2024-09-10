@@ -16,7 +16,7 @@ const NewTaskBtn = () => {
 				width={20}
 				height={20}
 				alt="+"
-				className=" mr-3"
+				className="mr-3"
 			/>
 			タスクの追加
 		</Button>
