@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { M_PLUS_1p } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const mplus1p = M_PLUS_1p({ weight: ['400', '700'], subsets: ['latin'] });
 
 export const metadata: Metadata = {
 	title: 'You-DO',
@@ -21,7 +21,7 @@ export default function RootLayout({
 				<link rel="apple-touch-icon" href="/pwa/icon512_maskable.png"></link>
 				<meta name="theme-color" content="#ED5E59" />
 			</head>
-			<body className={inter.className}>{children}</body>
+			<body className={mplus1p.className}>{children}</body>
 		</html>
 	);
 }
