@@ -46,12 +46,12 @@ export async function POST(req:any) {
                 message: "This uuid is already registered",
             },{ status: 409 });
         }
-        const {error} = await spabase.from("sample-User").insert([insertObj]);
+        const {data, error} = await spabase.from("sample-User").insert([insertObj]).select();
         if (error) {
             throw error;
         }
         return NextResponse.json({
-            message: "User created successfully",
+            user: data[0],
         });
     } catch (error) {
         return NextResponse.json({
