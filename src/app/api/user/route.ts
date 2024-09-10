@@ -33,6 +33,12 @@ export async function POST(req:any) {
 
     try {
         //TODO: すでに登録されているuuidがあるか確認
+        if(await isConflict(body.uuid)) {
+            return NextResponse.json({
+                status: 409,
+                message: "This uuid is already registered",
+            },{ status: 409 });
+        }
         const {error} = await spabase.from("sample-User").insert([insertObj]);
         if (error) {
             throw error;
@@ -46,4 +52,15 @@ export async function POST(req:any) {
             message: "Internal Server Error",
         },{status: 500});
     }
+}
+
+async function isConflict(uuid: string) {
+    const { data, error } = await spabase.from("sample-User").select("*").eq("uuid", uuid);
+    if (error) {
+        throw error;
+    }
+    if (data.length > 0) {
+        return true;
+    }
+    return false;
 }
