@@ -17,7 +17,6 @@ export async function POST(req:any) {
     }
     const body = await req.json();
 
-    console.log("デバッグ"+JSON.stringify(body));
 
     //survey_file_nameとimage_urlは仮の値を入れる
     const insertObj = {
@@ -42,7 +41,6 @@ export async function POST(req:any) {
             message: "User created successfully",
         });
     } catch (error) {
-        console.log(error);
         return NextResponse.json({
             status: 500,
             message: "Internal Server Error",
