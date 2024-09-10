@@ -17,6 +17,13 @@ export async function POST(req:any) {
     }
     const body = await req.json();
 
+    //いずれかのパラメータが不正な場合はエラー（簡易的なもの）
+    if (!body.uuid || !body.name || !body.gender || !body.birthday) {
+        return NextResponse.json({
+            status: 400,
+            message: "Bad Request",
+        },{ status: 400 });
+    }
 
     //survey_file_nameとimage_urlは仮の値を入れる
     const insertObj = {
