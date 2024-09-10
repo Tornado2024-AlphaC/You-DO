@@ -42,7 +42,6 @@ export async function GET(_:any, { params }:{ params: { user_id: string } }) {
             scheduleList,
         });
     } catch (error) {
-        console.log(error);
         return NextResponse.json({
             status: 500,
             message: "Internal Server Error",
