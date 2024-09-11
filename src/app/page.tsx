@@ -21,9 +21,9 @@ export default function Home() {
 		const isUserRegistered = await checkUserRegistration(user.email as string);
 	
 		if (isUserRegistered) {
-			router.push("/login-after"); // ログイン後のページに遷移
+			router.push("/top-task"); // ログイン後のページに遷移
 		} else {
-			router.push("/input-info"); // 初回登録情報入力ページに遷移
+			router.push("/top-task"); // 初回登録情報入力ページに遷移
 		}
 		} catch (error) {
 		console.error("Google Sign-In Error:", error);
@@ -37,7 +37,7 @@ export default function Home() {
 		{/* ロゴセクション */}
 		<div className="mb-8">
 			<img
-			src="/path/to/your/logo.png" // ロゴのパス
+			src="You-DO/public/google_login/AlphaC_Googleligin_image.svg" // ロゴのパス
 			alt="Logo"
 			className="w-32 h-32"
 			/>
