@@ -1045,8 +1045,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  schedule:
-                    $ref: "#/components/schemas/Schedule"
+                  scheduleList:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Schedule"
         "400":
           description: パラメーター不足
           content:
