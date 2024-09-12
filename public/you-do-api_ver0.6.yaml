@@ -1,0 +1,1401 @@
+openapi: 3.0.0
+info:
+  title: You-DO API
+  description: You-DOで使用するAPIの仕様書。
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+tags:
+  - name: Hello
+    description: APIの動作確認用のエンドポイント。
+  - name: Sample-Post
+    description: Spabaseの動作確認用のエンドポイント。
+  - name: User
+    description: ユーザー情報に関するエンドポイント。
+  - name: Task
+    description: タスク情報に関するエンドポイント。
+  - name: Schedule
+    description: スケジュール情報に関するエンドポイント。
+paths:
+  /hello:
+    get:
+      tags:
+        - Hello
+      summary: Hello API
+      description: APIの動作確認用のエンドポイント。
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hello Next.js API Routes
+  /sample-post:
+    get:
+      tags:
+        - Sample-Post
+      summary: Sample Post API
+      description: Spabase動作確認用として、仮の投稿データを返すエンドポイント。
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    created_at:
+                      type: string
+                      example: 2021-08-01T00:00:00.000Z
+                    title:
+                      type: string
+                      example: サンプルタイトル
+                    body:
+                      type: string
+                      example: サンプル本文
+  /user/{uuid}:
+    get:
+      tags:
+        - User
+      summary: ユーザー情報取得
+      description: 指定されたユーザーの情報を取得するエンドポイント
+      parameters:
+        - name: uuid
+          in: path
+          description: ユーザーのuuid
+          required: true
+          schema:
+            type: string
+            example: 12345678-1234-1234-1234-123456789012
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /user/params1:
+    put:
+      tags:
+        - User
+      summary: params1の更新
+      description: params1の更新
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: id
+          in: query
+          description: 終了したタスクのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /user/params2:
+    put:
+      tags:
+        - User
+      summary: params2の更新
+      description: params2の更新
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: id
+          in: query
+          description: 終了した空き時間(schedule)のid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /user/:
+    post:
+      tags:
+        - User
+      summary: ユーザー登録
+      description: ユーザー情報を登録するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  example: 12345678-1234-1234-1234-123456789012
+                name:
+                  type: string
+                  example: ユーザー名
+                gender:
+                  type: string
+                  example: m
+                birthday:
+                  type: string
+                  example: 2000-01-01T00:00:00.000Z
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "409":
+          description: ユーザー重複
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 409
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/{user_id}/list:
+    get:
+      tags:
+        - Task
+      summary: タスク一覧取得
+      description: 指定されたユーザーのタスクの一覧を優先度が高い順に取得
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: タスク未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/{user_id}/next:
+    get:
+      tags:
+        - Task
+      summary: 今やるべきタスク一覧取得
+      description: 指定されたユーザー、指定された空き時間に対して、今やるべきタスクの一覧を、優先度が高い順に取得するエンドポイント。
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: タスク未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task:
+    post:
+      tags:
+        - Task
+      summary: タスク登録
+      description: 指定されたユーザーのタスク情報を登録するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: タスクタイトル
+                limit_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                parent_id:
+                  type: integer
+                  example: 1
+                available_break:
+                  type: boolean
+                  example: true
+                expectation:
+                  type: integer
+                  example: 120
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: "#/components/schemas/Task"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+    put:
+      tags:
+        - Task
+      summary: タスク更新
+      description: 指定されたIDのタスク情報を更新するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                user_id:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: タスクタイトル
+                limit_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                parent_id:
+                  type: integer
+                  example: 1
+                available_break:
+                  type: boolean
+                  example: true
+                duration:
+                  type: integer
+                  example: 60
+                expectation:
+                  type: integer
+                  example: 120
+                progress:
+                  type: integer
+                  example: 0
+                priority:
+                  type: integer
+                  example: 1
+                skip_count:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/setpriority:
+    put:
+      tags:
+        - Task
+      summary: タスク優先度更新
+      description: タスクが追加されたり、編集されたときに全てのタスクの優先度を更新（再計算）するエンドポイント。
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/changepriority:
+    put:
+      tags:
+        - Task
+      summary: タスク優先度更新（一部並び替え）
+      description: タスクがスワイプされたときにタスクの優先度を更新するエンドポイント。
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/culcUrgency:
+    put:
+      tags:
+        - Task
+      summary: タスクの緊急度更新
+      description: 全てのタスクの緊急度を更新（再計算）するエンドポイント。
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/culcExpectaion:
+    put:
+      tags:
+        - Task
+      summary: タスクの予想残り所要時間更新
+      description: 全てのタスクの予想残り所要時間を更新（再計算）するエンドポイント。
+      parameters:
+        - name: user_id
+          in: query
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: ユーザー未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /task/{id}:
+    get:
+      tags:
+        - Task
+      summary: タスク詳細取得
+      description: 指定されたIDのタスクの詳細情報を取得するエンドポイント。
+      parameters:
+        - name: id
+          in: path
+          description: タスクのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: "#/components/schemas/Task"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: タスク未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+    delete:
+      tags:
+        - Task
+      summary: タスク削除
+      description: 指定されたIDのタスク情報を削除するエンドポイント。
+      parameters:
+        - name: id
+          in: path
+          description: タスクのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /schedule/{user_id}/list:
+    get:
+      tags:
+        - Schedule
+      summary: スケジュール一覧取得
+      description: 指定されたユーザーのスケジュールの一覧を取得するエンドポイント。
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Schedule"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /schedule/{user_id}/next-empty:
+    get:
+      tags:
+        - Schedule
+      summary: 次の空き時間取得
+      description: 指定されたユーザーの次の空き時間を取得するエンドポイント。
+      parameters:
+        - name: user_id
+          in: path
+          description: ユーザーのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduleList:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Schedule"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /schedule:
+    post:
+      tags:
+        - Schedule
+      summary: スケジュール登録
+      description: 指定されたユーザーのスケジュール情報を登録するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                type:
+                  type: string
+                  example: empty
+                start_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                end_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+      responses:
+        "200":
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    $ref: "#/components/schemas/Schedule"
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+    put:
+      tags:
+        - Schedule
+      summary: スケジュール更新
+      description: 指定されたIDのスケジュール情報を更新するエンドポイント。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                user_id:
+                  type: integer
+                  example: 1
+                type:
+                  type: string
+                  example: empty
+                start_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+                end_time:
+                  type: string
+                  example: 2021-08-01T00:00:00.000Z
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ"
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+  /schedule/{id}:
+    delete:
+      tags:
+        - Schedule
+      summary: スケジュール削除
+      description: 指定されたIDのスケジュール情報を削除するエンドポイント。
+      parameters:
+        - name: id
+          in: path
+          description: スケジュールのid
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: 成功
+        "400":
+          description: パラメーター不足
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "404":
+          description: スケジュール未登録
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: エラーメッセージ
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: エラーメッセージ
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: エラーメッセージ
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        uuid:
+          type: string
+          example: 12345678-1234-1234-1234-123456789012
+        name:
+          type: string
+          example: ユーザー名
+        gender:
+          type: string
+          example: m
+        birthday:
+          type: string
+          example: 2000-01-01T00:00:00.000Z
+        survey_file_name:
+          type: string
+          example: ファイル名
+        task_completed_count:
+          type: integer
+          example: 0
+        image_url:
+          type: string
+          example: http://sample-image.com
+        params1:
+          type: integer
+          example: 0
+        params2:
+          type: integer
+          example: 0
+        login_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        created_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: タスクタイトル
+        limit_time:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        parent_id:
+          type: integer
+          example: 1
+        available_break:
+          type: boolean
+          example: true
+        duration:
+          type: integer
+          example: 60
+        expectation:
+          type: integer
+          example: 120
+        urgency:
+          type: integer
+          example: 0
+        firstexpect:
+          type: integer
+          example: 0
+        progress:
+          type: integer
+          example: 0
+        priority:
+          type: integer
+          example: 1
+        skip_count:
+          type: integer
+          example: 0
+        created_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        updated_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+    Schedule:
+      properties:
+        id:
+          type: integer
+          example: 0
+        user_id:
+          type: integer
+          example: 0
+        type:
+          type: string
+          example: empty
+        start_time:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        end_time:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        duration:
+          type: integer
+          example: 0
+        updated_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
+        created_at:
+          type: string
+          example: 2021-08-01T00:00:00.000Z
