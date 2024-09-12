@@ -4,6 +4,9 @@ import { signInWithGoogle } from "@/libs/firebase/index"; // index.tsから関�
 import { useRouter } from 'next/navigation'
 import { useState } from "react";
 
+import Image from 'next/image';
+import youDoLog from '../../public/google_login/AlphaC_Googleligin_image.svg';
+
 
 export default function Home() {
 	const router = useRouter()
@@ -36,11 +39,7 @@ export default function Home() {
 		<div className="flex flex-col items-center justify-center h-screen bg-gray-50">
 		{/* ロゴセクション */}
 		<div className="mb-8">
-			<img
-			src="You-DO/public/google_login/AlphaC_Googleligin_image.svg" // ロゴのパス
-			alt="Logo"
-			className="w-32 h-32"
-			/>
+			<Image src={youDoLog} alt="Logo" className="w-32 h-32" />
 		</div>
 	
 		{/* Googleログインボタン */}
@@ -49,13 +48,9 @@ export default function Home() {
 			disabled={loading} // ローディング中はボタンを無効化
 			className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-100 disabled:opacity-50"
 		>
-			<img
-			src="/path/to/google-icon.png" // Googleアイコンのパス
-			alt="Google"
-			className="w-6 h-6 mr-2"
-			/>
+
 			<span className="text-gray-700">
-			{loading ? "ログイン中..." : "Googleでログイン"}
+			{loading ? "ログイン中..." : "Googleログイン"}
 			</span>
 		</button>
 		</div>
