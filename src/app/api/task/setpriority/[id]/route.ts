@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import spabase from "../../../../libs/spabase"; // Supabase接続設定
+import spabase from "@/libs/spabase";
 
-export async function PUT(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const userId = Number(searchParams.get("user_id"));
+export async function PUT(req:any, { params }:any) {
+    const userId = Number(params.id);
 
     // クエリパラメータのチェック
     if (!userId) {
@@ -11,6 +10,13 @@ export async function PUT(req: Request) {
             status: 400,
             message: "ユーザーIDが必要です",
         }, { status: 400 });
+    }
+
+    if (isNaN(userId)) {
+        return NextResponse.json({
+            status: 400,
+            message: "Bad Request",
+        },{ status: 400 });
     }
 
     try {
@@ -22,9 +28,9 @@ export async function PUT(req: Request) {
 
         if (error) {
             return NextResponse.json({
-                status: 500,
+                status: 404,
                 message: "ユーザーが存在しません",
-            }, { status: 500 });
+            }, { status: 404 });
         }
 
         if (!tasks || tasks.length === 0) {
