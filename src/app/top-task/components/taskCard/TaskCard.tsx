@@ -26,7 +26,13 @@ const TaskCard = () => {
 						alt="icon"
 						className="p-2 rounded-full mr-3"
 					/>
-					Task progress
+					<div className="flex flex-row justify-center items-center space-x-[12px]">
+						<div className="relative w-[230px] h-3 border-2 border-green-secondary bg-green-secondary rounded-full">
+							{/* 進捗率（Widthで調整） */}
+							<span className="absolute top-0 bg-green-tertiary h-[11px] w-[23px] rounded-full" />
+						</div>
+						<p>10%</p>
+					</div>
 				</div>
 				<div className="flex items-center p-2">
 					<Image
