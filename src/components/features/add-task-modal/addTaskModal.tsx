@@ -91,7 +91,11 @@ const AddTaskModal = () => {
 			</div>
 			<div className="p-4">
 				<div className="flex items-center mb-4">
-					<Image src={youDoAddTask} alt="時計アイコン" className="w-6 h-6 mr-2" />
+					<Image 
+						src={youDoAddTask} 
+						alt="時計アイコン" 
+						className="w-8 h-8 mr-2" 
+					/>
 					<h3 className="text-gray-700 font-medium">所要時間</h3>
 					<span className="text-green-600 ml-auto">{formatTime(totalMinutes)}</span>
 				</div>
