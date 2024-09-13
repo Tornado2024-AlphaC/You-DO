@@ -41,7 +41,8 @@ export async function PUT(req:any, { params }:any) {
         }
 
         // タスクの優先度を再計算
-        const sortedTasks = tasks.sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime());
+        const selectedTasks = tasks.filter(task => task.progress !== 100);
+        const sortedTasks = selectedTasks.sort((a, b) => new Date(a.limit_time).getTime() - new Date(b.limit_time).getTime());
 
         const updatePromises = sortedTasks.map((task, index) => {
             // 各タスクに順位を設定 (最も早い締切が優先度1)
