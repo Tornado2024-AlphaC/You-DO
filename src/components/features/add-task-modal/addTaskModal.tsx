@@ -5,6 +5,9 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
+import Image from 'next/image';
+import youDoAddTask from '../../../../public/add-task/Frame 100.svg';
+
 
 // 型定義
 type TimeUnit = '10分' | '30分' | '1時間';
@@ -88,7 +91,7 @@ const AddTaskModal = () => {
 			</div>
 			<div className="p-4">
 				<div className="flex items-center mb-4">
-					<img src="/path/to/icon.png" alt="時計アイコン" className="w-6 h-6 mr-2" />
+					<Image src={youDoAddTask} alt="時計アイコン" className="w-6 h-6 mr-2" />
 					<h3 className="text-gray-700 font-medium">所要時間</h3>
 					<span className="text-green-600 ml-auto">{formatTime(totalMinutes)}</span>
 				</div>
