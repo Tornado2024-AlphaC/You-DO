@@ -53,7 +53,6 @@ export async function PUT(req:any, { params }:any) {
                 selectedTasks[i-1].priority -= 1;
             }
         }
-        console.log(selectedTasks);
         const updatePromises = selectedTasks.map((task:any, index:number) => {
             // 各タスクに順位を設定 (最も早い締切が優先度1)
             return spabase
@@ -73,7 +72,6 @@ export async function PUT(req:any, { params }:any) {
         }, { status: 200 });
 
     } catch (error) {
-        console.error("Error:", error);
         return NextResponse.json({
             status: 500,
             message: "サーバーエラーが発生しました",
