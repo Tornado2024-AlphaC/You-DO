@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import spabase from "@/libs/spabase";
 
 export async function PUT(req:any, { params }:any) {
-    const userId = Number(params.id);
+    const userId = Number(params.user_id);
 
-    // クエリパラメータのチェック
+    // パラメータのチェック
     if (!userId) {
         return NextResponse.json({
             status: 400,
