@@ -125,7 +125,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /user/params1:
+  /user/{user_id}/params1:
     put:
       tags:
         - User
@@ -133,7 +133,7 @@ paths:
       description: params1の更新
       parameters:
         - name: user_id
-          in: query
+          in: path
           description: ユーザーのid
           required: true
           schema:
@@ -195,7 +195,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /user/params2:
+  /user/{user_id}/params2:
     put:
       tags:
         - User
@@ -203,7 +203,7 @@ paths:
       description: params2の更新
       parameters:
         - name: user_id
-          in: query
+          in: path
           description: ユーザーのid
           required: true
           schema:
@@ -405,7 +405,7 @@ paths:
     get:
       tags:
         - Task
-      summary: 今やるべきタスク一覧取得
+      summary: 今やるべきタスク一覧取得(優先度上位五つ（なければあるだけ）)
       description: 指定されたユーザー、指定された空き時間に対して、今やるべきタスクの一覧を、優先度が高い順に取得するエンドポイント。
       parameters:
         - name: user_id
@@ -604,7 +604,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /task/setpriority:
+  /task/{user_id}/setpriority:
     put:
       tags:
         - Task
@@ -612,7 +612,7 @@ paths:
       description: タスクが追加されたり、編集されたときに全てのタスクの優先度を更新（再計算）するエンドポイント。
       parameters:
         - name: user_id
-          in: query
+          in: path
           description: ユーザーのid
           required: true
           schema:
@@ -667,7 +667,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /task/changepriority:
+  /task/{user_id}/changepriority:
     put:
       tags:
         - Task
@@ -675,7 +675,7 @@ paths:
       description: タスクがスワイプされたときにタスクの優先度を更新するエンドポイント。
       parameters:
         - name: user_id
-          in: query
+          in: path
           description: ユーザーのid
           required: true
           schema:
@@ -730,7 +730,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /task/culcUrgency:
+  /task/{user_id}/culcUrgency:
     put:
       tags:
         - Task
@@ -738,7 +738,7 @@ paths:
       description: 全てのタスクの緊急度を更新（再計算）するエンドポイント。
       parameters:
         - name: user_id
-          in: query
+          in: path
           description: ユーザーのid
           required: true
           schema:
@@ -793,7 +793,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /task/culcExpectaion:
+  /task/{user_id}/culcExpectaion:
     put:
       tags:
         - Task
@@ -801,7 +801,7 @@ paths:
       description: 全てのタスクの予想残り所要時間を更新（再計算）するエンドポイント。
       parameters:
         - name: user_id
-          in: query
+          in: path
           description: ユーザーのid
           required: true
           schema:
