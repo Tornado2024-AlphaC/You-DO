@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { CalendarToday } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
+import TaskCard from '../../components/features/task-card/task-card';
 
 // Tailwind CSS for styling
 const TaskList: React.FC = () => {
@@ -32,7 +33,8 @@ const TaskList: React.FC = () => {
 	  </div>
       {/* Message */}
       <div className="flex-grow flex justify-center items-center">
-        <p className="text-green-600 text-lg">本日納期のタスクはありません</p>
+        {/* <p className="text-green-600 text-lg">本日納期のタスクはありません</p> */}
+		<TaskCard/>
       </div>
 
       {/* Footer Button */}
