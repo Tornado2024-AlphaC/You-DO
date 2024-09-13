@@ -33,7 +33,8 @@ const TaskList: React.FC = () => {
 	  </div>
       {/* Message */}
       <div className="flex-grow flex justify-center items-center">
-        {/* <p className="text-green-600 text-lg">本日納期のタスクはありません</p> */}
+	  	{/* ここをタスクがあるときない時に切り替える */}
+        {/* <p className="text-green-600 text-lg">本日納期のタスクはありません</p>  */}
 		<TaskCard/>
       </div>
 
