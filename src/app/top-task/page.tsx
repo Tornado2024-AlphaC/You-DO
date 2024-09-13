@@ -1,24 +1,22 @@
 'use client';
 
-import { DailySchedule, Profile, TaskList } from '@/constants/routing';
-import Link from 'next/link';
+import Footer from '@/components/features/footer/Footer';
 import React from 'react';
+import TaskCard from './components/taskCard/TaskCard';
+import { ResetBtn, ResetBtnDisabled } from './components/timer/ResetBtn';
+import { InTimer, NextTimer } from './components/timer/Timer';
 
 const TopTask = () => {
 	return (
 		<main>
-			<h1>TopTask</h1>
-			<Link href={Profile} className="text-blue-500">
-				プロフィール画面へ
-			</Link>
-			<div className="flex justify-between">
-				<Link href={TaskList} className="text-blue-500">
-					タスク一覧画面へ
-				</Link>
-				<Link href={DailySchedule} className="text-blue-500">
-					1日の予定画面へ
-				</Link>
+			<div className="absolute top-0 my-14 space-y-4">
+				<NextTimer />
+				<ResetBtnDisabled />
 			</div>
+
+			<TaskCard />
+
+			<Footer />
 		</main>
 	);
 };
