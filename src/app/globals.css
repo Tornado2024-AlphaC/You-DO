@@ -11,9 +11,10 @@ html {
 body,
 #__next {
 	height: 100%;
-	width: 430px;
+	width: auto;
 	background-color: #fdfdfd;
-	min-width: 430px;
+	min-width: 432px;
+	max-width: 500px;
 	min-height: 830px;
 	margin: 0 auto;
 	padding: 0;
