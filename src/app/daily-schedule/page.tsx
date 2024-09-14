@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // import 'react-calendar/dist/Calendar.css'; // カレンダーのスタイル
 import './daily-schedule.css';
+import { SideSwipe } from '@/components/ui/sideSwipe';
 
 interface Task {
 	id: number;
@@ -57,24 +58,25 @@ const DailySchedule: React.FC = () => {
 	};
 
 	return (
-		<div className="app">
-			<header className="header">
-				<button onClick={toggleCalendar} className="button date-button">
-					📅 {selectedDate.toLocaleDateString()}
-				</button>
-				<button
-					className="button deadline-button"
-					onClick={() => console.log('納期一覧に移動')}
-				>
-					⏰ 納期
-				</button>
-			</header>
+		<SideSwipe>
+			<div className="app">
+				<header className="header">
+					<button onClick={toggleCalendar} className="button date-button">
+						📅 {selectedDate.toLocaleDateString()}
+					</button>
+					<button
+						className="button deadline-button"
+						onClick={() => console.log('納期一覧に移動')}
+					>
+						⏰ 納期
+					</button>
+				</header>
 
-			{/* カレンダーの表示/非表示 */}
-			{showCalendar && (
-				<div className="calendar-overlay">
-					<div className="calendar-container">
-						{/* <Calendar
+				{/* カレンダーの表示/非表示 */}
+				{showCalendar && (
+					<div className="calendar-overlay">
+						<div className="calendar-container">
+							{/* <Calendar
 							onChange={handleDateChange}
 							value={selectedDate}
 							tileClassName={({ date, view }) => {
@@ -89,31 +91,34 @@ const DailySchedule: React.FC = () => {
 								return null;
 							}}
 						/> */}
-					</div>
-				</div>
-			)}
-
-			<div className="schedule">
-				{Array.from({ length: 24 }, (_, i) => (
-					<div key={i} className="time-block">
-						<div className="time-label">{i.toString().padStart(2, '0')}:00</div>
-						<div className="event" draggable>
-							予定
 						</div>
 					</div>
-				))}
-			</div>
+				)}
 
-			<footer className="footer">
-				<button className="profile-button">👤</button>
-				<button
-					className="add-task-button"
-					onClick={() => postAvailability(availableTimes)}
-				>
-					+ タスク追加
-				</button>
-			</footer>
-		</div>
+				<div className="schedule">
+					{Array.from({ length: 24 }, (_, i) => (
+						<div key={i} className="time-block">
+							<div className="time-label">
+								{i.toString().padStart(2, '0')}:00
+							</div>
+							<div className="event" draggable>
+								予定
+							</div>
+						</div>
+					))}
+				</div>
+
+				<footer className="footer">
+					<button className="profile-button">👤</button>
+					<button
+						className="add-task-button"
+						onClick={() => postAvailability(availableTimes)}
+					>
+						+ タスク追加
+					</button>
+				</footer>
+			</div>
+		</SideSwipe>
 	);
 };
 export default DailySchedule;
