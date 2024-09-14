@@ -32,3 +32,17 @@ export const getUID = async () => {
     });
   });
 }
+
+// 表示名 を取得する（非同期関数を呼ぶので、Promiseで囲っている）
+export const getDisplayName = async () => {
+  return new Promise((resolve, reject) => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("displayName:", user.displayName);
+        resolve(user.displayName);
+      } else {
+        reject('No user is logged in');
+      }
+    });
+  });
+}
