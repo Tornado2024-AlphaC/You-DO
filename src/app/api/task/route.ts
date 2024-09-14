@@ -128,9 +128,6 @@ export async function PUT(req: any) {
 		);
 	}
 
-	//ttimestamptz型で現在の日時を取得
-	const now = new Date().toISOString();
-
 	const updateObj = {
 		id: body.id,
 		user_id: body.user_id,
@@ -143,7 +140,6 @@ export async function PUT(req: any) {
 		progress: body.progress,
 		priority: body.priority,
 		skip_count: body.skip_count,
-		updated_at: now,
 	};
 
 	try {
