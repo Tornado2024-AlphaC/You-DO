@@ -1,0 +1,120 @@
+.TaskReview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #eaf6f6;
+    border-radius: 10px;
+}
+  
+.screen-title {
+    font-size: 16px;
+    color: #555;
+}
+  
+.task-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+  
+.task-icon {
+    position: relative; /* 親要素に relative を設定 */
+    width: 150px; /* 全体の幅を指定 */
+    height: 150px; /* 全体の高さを指定 */
+  }
+
+.image1,
+.image2,
+.image3 {
+  position: absolute; /* 中心に配置するために絶対配置 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 中心に配置 */
+}
+
+.image1 {
+    width: 104px; /* 画像1のサイズ */
+    height: 104px;
+    z-index: 1; /* 表示の順序 */
+}
+  
+.image2 {
+    width: 52px; /* 画像2のサイズ */
+    height: 52px;
+    z-index: 2; /* 表示の順序 */
+    opacity: 0.8; /* 半透明 */
+}
+  
+.image3 {
+    width: 19px; /* 画像3のサイズ */
+    height: 16px;
+    z-index: 3; /* 表示の順序 */
+    opacity: 0.6; 
+}
+  
+.task-name {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+
+/* 親コンテナのスタイル */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 水平方向に中央に配置 */
+    justify-content: center; /* 垂直方向に中央に配置 */
+    min-height: 100vh; /* 画面全体の高さに */
+    width: 100%;
+    padding: 20px; /* 上下左右に余白 */
+}
+
+  
+.progress-section, .satisfaction-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #f2fcfc;
+    padding: 20px;
+    border-radius: 8px;
+}
+  
+.progress-section input[type="range"] {
+    width: 100%;
+}
+  
+.satisfaction-options {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+  
+.satisfaction-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+  
+.satisfaction-button.selected {
+    transform: scale(1.2);
+}
+  
+.next-task-button {
+    align-items: center; /* 水平方向に中央に配置 */
+    background-color: #68c3a3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+  
+.next-task-button:hover {
+    background-color: #56a98c;
+}
