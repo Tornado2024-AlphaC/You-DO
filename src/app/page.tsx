@@ -7,9 +7,58 @@ import { useState } from "react";
 import Image from 'next/image';
 import youDoLog from '../../public/google_login/AlphaC_Googleligin_image.svg';
 import { getUID } from "@/libs/firebase/auth";
+import { userAgent } from "next/server";
 
 
 export default function Home() {
+	const get_user_data = async (uid:string) => {
+		return new Promise((resolve, reject) => {
+		console.log("関数内の"+uid)
+		const url = `api/user/${uid}`;
+		console.log("送るリクエスト"+url)
+		try {
+		  fetch(url, {
+			method: "GET",
+			headers: {
+			  "Content-Type": "application/json",
+			},
+		  }).then(async (res) => {
+			const contentType = res.headers.get("content-type");
+			if (!res.ok) {
+			  const statusCode = res.status;
+			  if (!contentType || !contentType.includes("application/json")) {
+				throw new Error("Oops, we haven't got JSON!");
+			  }
+			  switch (statusCode) {
+				case 400:
+				  console.log("400のエラーが出ました。")
+				  throw new Error("Bad Request");
+				case 401:
+				  console.log("401のエラーが出ました。")
+				  throw new Error("Unauthorized");
+				case 404:
+				  console.log("404のエラーが出ました。")
+				  throw new Error("Not Found");
+				case 500:
+				  console.log("500のエラーが出ました。")
+				  throw new Error("Internal Server Error");
+				default:
+				  console.log("その他のエラーが出ました。")
+				  throw new Error("Unknown Error");
+			  }
+			}
+			const data = await res.json();
+			console.log("このユーザーのuserid"+data.user.id)
+			resolve(data.user);
+		  });
+		} catch (error) {
+		  alert("P1ユーザー情報取得中に、エラーが発生しました。");
+		  console.log(error);
+		  reject(null);
+		}
+	  });
+	}
+
 	const router = useRouter()
 	const [loading, setLoading] = useState(false); // ローディング状態を管理
 	
@@ -28,15 +77,39 @@ export default function Home() {
 			// console.log("isUserRegistered == True")
 			// ユーザー登録を行うAPI
 			const user_uid = await getUID();
-			// console.log("user_uidは、"+user_uid)
-			router.push("/top-task"); // 初回登録情報入力ページに遷移
+			if (typeof user_uid === 'string') {
+				// uidがstring型の場合のみ次の処理に進む
+				// API呼び出し
+				// const user_data = await get_user_data(user_uid); あとで実装
+				// console.log("user_uidは、"+user_uid)
+				router.push("/top-task"); // 初回登録情報入力ページに遷移
+				// ここに次の処理を書ける
+			  } else {
+				alert("P2ユーザー情報の取得に失敗しました。");
+				return
+			}
 
 		} else {
 			// console.log("isUserRegistered == Folse")
 			// ユーザー情報を取得するAPI
 			const user_uid = await getUID();
-			// console.log("user_uidは、"+user_uid)
-			router.push("/top-task"); // ログイン後のページに遷移
+			if (typeof user_uid === 'string') {
+				// uidがstring型の場合のみ次の処理に進む
+				// console.log("user_uidは、"+user_uid)
+				// API呼び出し
+				const user_data = await get_user_data(user_uid);
+				if (!user_data){
+					alert("P3ユーザー情報の取得に失敗しました。")
+					console.log(user_data)
+					return
+				}
+				console.log("userのnameは、"+JSON.stringify(user_data))
+				router.push("/top-task"); // 初回登録情報入力ページに遷移
+				// ここに次の処理を書ける
+			  } else {
+				alert("P4ユーザー情報の取得に失敗しました。");
+				return
+			}
 		}
 		} catch (error) {
 		console.error("Google Sign-In Error:", error);
