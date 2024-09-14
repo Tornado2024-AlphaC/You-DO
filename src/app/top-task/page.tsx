@@ -5,19 +5,27 @@ import React from 'react';
 import TaskCard from './components/taskCard/TaskCard';
 import { ResetBtn, ResetBtnDisabled } from './components/timer/ResetBtn';
 import { InTimer, NextTimer } from './components/timer/Timer';
+import { DailySchedule, TaskList } from '@/constants/routing';
+import { useSwipeable } from 'react-swipeable';
+import { useRouter } from 'next/navigation';
 import { SideSwipe } from '@/components/ui/sideSwipe';
-import Link from 'next/link';
-import { TaskList } from '@/constants/routing';
 
 const TopTask = () => {
+	const router = useRouter();
+
+	const handlers = useSwipeable({
+		onSwipedLeft: () => router.push(TaskList),
+		onSwipedRight: () => router.push(DailySchedule),
+		preventScrollOnSwipe: true,
+		trackMouse: true,
+	});
+
 	return (
 		<SideSwipe>
-			<main>
+			<main {...handlers}>
 				<div className="absolute top-0 my-14 space-y-4">
 					<NextTimer />
 					<ResetBtnDisabled />
-					<Link href={TaskList}>タスク一覧へ</Link>
-					<Link href="/daily-schedule">日課へ</Link>
 				</div>
 
 				<TaskCard />

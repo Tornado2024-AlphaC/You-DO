@@ -1,11 +1,13 @@
 'use client';
 
 import { Profile, TopTask } from '@/constants/routing';
-import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // import 'react-calendar/dist/Calendar.css'; // カレンダーのスタイル
 import './daily-schedule.css';
+import Footer from '@/components/features/footer/Footer';
+import { useRouter } from 'next/navigation';
+import { useSwipeable } from 'react-swipeable';
 import { SideSwipe } from '@/components/ui/sideSwipe';
 
 interface Task {
@@ -42,6 +44,14 @@ const DailySchedule: React.FC = () => {
 		}
 	};
 
+	const router = useRouter();
+
+	const handlers = useSwipeable({
+		onSwipedLeft: () => router.push(TopTask),
+		preventScrollOnSwipe: true,
+		trackMouse: true,
+	});
+
 	useEffect(() => {
 		fetchTasks();
 	}, [selectedDate]);
@@ -59,7 +69,7 @@ const DailySchedule: React.FC = () => {
 
 	return (
 		<SideSwipe>
-			<div className="app">
+			<main className="app" {...handlers}>
 				<header className="header">
 					<button onClick={toggleCalendar} className="button date-button">
 						📅 {selectedDate.toLocaleDateString()}
@@ -108,16 +118,8 @@ const DailySchedule: React.FC = () => {
 					))}
 				</div>
 
-				<footer className="footer">
-					<button className="profile-button">👤</button>
-					<button
-						className="add-task-button"
-						onClick={() => postAvailability(availableTimes)}
-					>
-						+ タスク追加
-					</button>
-				</footer>
-			</div>
+				<Footer />
+			</main>
 		</SideSwipe>
 	);
 };

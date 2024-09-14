@@ -1,19 +1,25 @@
+'use client';
+
+import Footer from '@/components/features/footer/Footer';
 import { SideSwipe } from '@/components/ui/sideSwipe';
-import { Profile, TopTask } from '@/constants/routing';
-import Link from 'next/link';
+import { TopTask } from '@/constants/routing';
+import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useSwipeable } from 'react-swipeable';
 
 const TaskList = () => {
+	const router = useRouter();
+
+	const handlers = useSwipeable({
+		onSwipedRight: () => router.push(TopTask),
+		preventScrollOnSwipe: true,
+		trackMouse: true,
+	});
 	return (
 		<SideSwipe>
-			<main>
+			<main {...handlers}>
 				<h1>TaskList</h1>
-				<Link href={Profile} className="text-blue-500">
-					プロフィール画面へ
-				</Link>
-				<Link href={TopTask} className="text-blue-500">
-					今やるタスク画面へ
-				</Link>
+				<Footer />
 			</main>
 		</SideSwipe>
 	);
