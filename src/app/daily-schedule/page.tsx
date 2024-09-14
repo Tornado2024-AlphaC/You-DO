@@ -4,7 +4,7 @@ import { Profile, TopTask } from '@/constants/routing';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import 'react-calendar/dist/Calendar.css'; // カレンダーのスタイル
+// import 'react-calendar/dist/Calendar.css'; // カレンダーのスタイル
 import './daily-schedule.css';
 
 interface Task {
@@ -74,7 +74,7 @@ const DailySchedule: React.FC = () => {
 			{showCalendar && (
 				<div className="calendar-overlay">
 					<div className="calendar-container">
-						<Calendar
+						{/* <Calendar
 							onChange={handleDateChange}
 							value={selectedDate}
 							tileClassName={({ date, view }) => {
@@ -88,7 +88,7 @@ const DailySchedule: React.FC = () => {
 								}
 								return null;
 							}}
-						/>
+						/> */}
 					</div>
 				</div>
 			)}
