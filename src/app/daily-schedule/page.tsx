@@ -97,11 +97,6 @@ const DailySchedule: React.FC = () => {
 
 export default DailySchedule;
 
-
-
-
-
-
 // return (
 // 	<main>
 // 		<h1>Daily Schedule</h1>
