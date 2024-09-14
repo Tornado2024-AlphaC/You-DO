@@ -1,11 +1,12 @@
 'use client'
 
-import { signInWithGoogle } from "@/libs/firebase/index"; // index.tsから関数をインポート
+import { auth, signInWithGoogle } from "@/libs/firebase/index"; // index.tsから関数をインポート
 import { useRouter } from 'next/navigation'
 import { useState } from "react";
 
 import Image from 'next/image';
 import youDoLog from '../../public/google_login/AlphaC_Googleligin_image.svg';
+import { getUID } from "@/libs/firebase/auth";
 
 
 export default function Home() {
@@ -24,9 +25,18 @@ export default function Home() {
 		const isUserRegistered = await checkUserRegistration(user.email as string);
 	
 		if (isUserRegistered) {
-			router.push("/top-task"); // ログイン後のページに遷移
-		} else {
+			// console.log("isUserRegistered == True")
+			// ユーザー登録を行うAPI
+			const user_uid = await getUID();
+			// console.log("user_uidは、"+user_uid)
 			router.push("/top-task"); // 初回登録情報入力ページに遷移
+
+		} else {
+			// console.log("isUserRegistered == Folse")
+			// ユーザー情報を取得するAPI
+			const user_uid = await getUID();
+			// console.log("user_uidは、"+user_uid)
+			router.push("/top-task"); // ログイン後のページに遷移
 		}
 		} catch (error) {
 		console.error("Google Sign-In Error:", error);
