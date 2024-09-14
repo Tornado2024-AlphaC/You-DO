@@ -24,7 +24,7 @@ paths:
       summary: Hello API
       description: APIの動作確認用のエンドポイント。
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -41,7 +41,7 @@ paths:
       summary: Sample Post API
       description: Spabase動作確認用として、仮の投稿データを返すエンドポイント。
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -77,7 +77,7 @@ paths:
             type: string
             example: 12345678-1234-1234-1234-123456789012
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -85,8 +85,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -99,7 +99,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -112,7 +112,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -147,7 +147,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -155,8 +155,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -169,7 +169,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -182,7 +182,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -217,7 +217,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -225,8 +225,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -239,7 +239,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -252,7 +252,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -291,7 +291,7 @@ paths:
                   type: string
                   example: 2000-01-01T00:00:00.000Z
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -299,8 +299,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -313,7 +313,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "409":
+        '409':
           description: ユーザー重複
           content:
             application/json:
@@ -326,7 +326,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -354,15 +354,15 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Task"
-        "400":
+                  $ref: '#/components/schemas/Task'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -375,7 +375,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: タスク未登録
           content:
             application/json:
@@ -388,7 +388,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -416,15 +416,15 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Task"
-        "400":
+                  $ref: '#/components/schemas/Task'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -437,7 +437,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: タスク未登録
           content:
             application/json:
@@ -450,7 +450,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -495,7 +495,7 @@ paths:
                   type: integer
                   example: 120
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -503,8 +503,8 @@ paths:
                 type: object
                 properties:
                   task:
-                    $ref: "#/components/schemas/Task"
-        "400":
+                    $ref: '#/components/schemas/Task'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -517,7 +517,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -576,9 +576,17 @@ paths:
                   type: integer
                   example: 0
       responses:
-        "200":
+        '200':
           description: 成功
-        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: '#/components/schemas/Task'
+
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -591,7 +599,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -619,7 +627,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -627,8 +635,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -641,7 +649,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -654,7 +662,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -682,7 +690,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -690,8 +698,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -704,7 +712,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -717,7 +725,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -745,7 +753,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -753,8 +761,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -767,7 +775,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -780,7 +788,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -808,7 +816,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -816,8 +824,8 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: "#/components/schemas/User"
-        "400":
+                    $ref: '#/components/schemas/User'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -830,7 +838,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: ユーザー未登録
           content:
             application/json:
@@ -843,7 +851,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -871,7 +879,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -879,8 +887,8 @@ paths:
                 type: object
                 properties:
                   task:
-                    $ref: "#/components/schemas/Task"
-        "400":
+                    $ref: '#/components/schemas/Task'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -893,7 +901,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: タスク未登録
           content:
             application/json:
@@ -906,7 +914,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -933,9 +941,9 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
-        "400":
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -948,7 +956,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -976,15 +984,15 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Schedule"
-        "400":
+                  $ref: '#/components/schemas/Schedule'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -997,7 +1005,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: スケジュール未登録
           content:
             application/json:
@@ -1010,7 +1018,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -1038,7 +1046,7 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -1048,8 +1056,8 @@ paths:
                   scheduleList:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Schedule"
-        "400":
+                      $ref: '#/components/schemas/Schedule'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -1062,7 +1070,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: スケジュール未登録
           content:
             application/json:
@@ -1075,7 +1083,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -1114,7 +1122,7 @@ paths:
                   type: string
                   example: 2021-08-01T00:00:00.000Z
       responses:
-        "200":
+        '200':
           description: 成功
           content:
             application/json:
@@ -1122,8 +1130,8 @@ paths:
                 type: object
                 properties:
                   schedule:
-                    $ref: "#/components/schemas/Schedule"
-        "400":
+                    $ref: '#/components/schemas/Schedule'
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -1136,7 +1144,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -1177,9 +1185,9 @@ paths:
                   type: string
                   example: 2021-08-01T00:00:00.000Z
       responses:
-        "200":
+        '200':
           description: 成功
-        "400":
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -1192,7 +1200,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: スケジュール未登録
           content:
             application/json:
@@ -1205,7 +1213,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ"
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
@@ -1233,9 +1241,9 @@ paths:
             type: integer
             example: 1
       responses:
-        "200":
+        '200':
           description: 成功
-        "400":
+        '400':
           description: パラメーター不足
           content:
             application/json:
@@ -1248,7 +1256,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "404":
+        '404':
           description: スケジュール未登録
           content:
             application/json:
@@ -1261,7 +1269,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-        "500":
+        '500':
           description: サーバーエラー
           content:
             application/json:
