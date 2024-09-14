@@ -6,6 +6,8 @@ import { TopTask } from '@/constants/routing';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useSwipeable } from 'react-swipeable';
+import { InTimer } from './components/timer/Timer';
+import TaskField from './components/tasks/TaskField';
 
 const TaskList = () => {
 	const router = useRouter();
@@ -18,7 +20,10 @@ const TaskList = () => {
 	return (
 		<SideSwipe>
 			<main {...handlers}>
-				<h1>TaskList</h1>
+				<TaskField taskTotal={7} />
+				{/* InTimer：空き時間中、NextTimer：空き時間外 */}
+				{/* <NextTimer /> */}
+				<InTimer />
 				<Footer />
 			</main>
 		</SideSwipe>
