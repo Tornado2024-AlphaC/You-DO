@@ -1,3 +1,5 @@
+'use client';
+import Footer from '@/components/features/footer/Footer';
 import { Profile, TopTask } from '@/constants/routing';
 import Link from 'next/link';
 import React from 'react';
@@ -12,6 +14,7 @@ const TaskList = () => {
 			<Link href={TopTask} className="text-blue-500">
 				今やるタスク画面へ
 			</Link>
+			
 		</main>
 	);
 };
