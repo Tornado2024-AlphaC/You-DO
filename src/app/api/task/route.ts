@@ -10,6 +10,20 @@ type Request = {
 	expectation: number;
 };
 
+type PutRequest = {
+	id: number;
+	user_id: number;
+	title: string;
+	limit_time: string;
+	parent_id: number | null;
+	available_break: boolean;
+	duration: number;
+	expectation: number;
+	progress: number;
+	priority: number;
+	skip_count: number;
+};
+
 export async function POST(req: any) {
 	if (!req.body) {
 		return NextResponse.json(
@@ -60,6 +74,79 @@ export async function POST(req: any) {
 		const { data, error } = await spabase
 			.from('sample-Task')
 			.insert([insertObj])
+			.select();
+		if (error) {
+			throw error;
+		}
+		return NextResponse.json({
+			task: data[0],
+		});
+	} catch (error) {
+		return NextResponse.json(
+			{
+				status: 500,
+				message: 'Internal Server Error',
+			},
+			{ status: 500 }
+		);
+	}
+}
+
+export async function PUT(req: any) {
+	if (!req.body) {
+		return NextResponse.json(
+			{
+				status: 400,
+				message: 'Bad Request',
+			},
+			{ status: 400 }
+		);
+	}
+
+	const body: PutRequest = await req.json();
+
+	//いずれかのパラメータが不正な場合はエラー（簡易的なもの）
+	if (
+		!body.hasOwnProperty('id') ||
+		!body.hasOwnProperty('user_id') ||
+		!body.hasOwnProperty('title') ||
+		!body.hasOwnProperty('limit_time') ||
+		!body.hasOwnProperty('parent_id') ||
+		!body.hasOwnProperty('available_break') ||
+		!body.hasOwnProperty('duration') ||
+		!body.hasOwnProperty('expectation') ||
+		!body.hasOwnProperty('progress') ||
+		!body.hasOwnProperty('priority') ||
+		!body.hasOwnProperty('skip_count')
+	) {
+		return NextResponse.json(
+			{
+				status: 400,
+				message: 'Bad Request',
+			},
+			{ status: 400 }
+		);
+	}
+
+	const updateObj = {
+		id: body.id,
+		user_id: body.user_id,
+		title: body.title,
+		limit_time: body.limit_time,
+		parent_id: body.parent_id,
+		available_break: body.available_break,
+		duration: body.duration,
+		expectation: body.expectation,
+		progress: body.progress,
+		priority: body.priority,
+		skip_count: body.skip_count,
+	};
+
+	try {
+		const { data, error } = await spabase
+			.from('sample-Task')
+			.update(updateObj)
+			.eq('id', body.id)
 			.select();
 		if (error) {
 			throw error;
