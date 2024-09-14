@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: You-DO API
   description: You-DOで使用するAPIの仕様書。
-  version: 1.0.0
+  version: 0.6.0
 servers:
   - url: http://localhost:3000/api
 tags:
