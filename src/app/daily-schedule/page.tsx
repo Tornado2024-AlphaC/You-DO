@@ -79,7 +79,7 @@ const DailySchedule: React.FC = () => {
                   className="bg-green-700 text-white text-center py-2 rounded-lg m-1 transition-transform duration-300 ease-in-out"
                   style={{ width: 'calc(100% - 1rem)' }}
                   {...swipeHandlers} // スワイプハンドラーを追加
-                  onTouchEnd={() => handleSwipe(index)} // スワイプで削除
+                  onTouchEnd={() => handleSwipe(index)} // スワイプで削除できる
                 >
                   {schedule.text}
                 </div>
