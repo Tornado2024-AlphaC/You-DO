@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import NewTaskBtn from './NewTaskBtn';
-import ProfileBtn from './ProfileBtn';
+import { ProfileBtn } from './FooterBtns';
 
 const Footer = () => {
 	return (
