@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import spabase from "@/libs/spabase";
-import { use } from "react";
-import { log } from "console";
 
 type Task = {
     id: number;
@@ -170,6 +168,9 @@ function culcUrgency(taskDatas:Task[], timeDatas:Schedule[], params2:number){
             }
         }
         remain -= duration;
+        if(remain ===0){
+            remain =1;
+        }
         taskDatas[i].urgency = categorizeValue(taskDatas[i].expectation/remain,params2);
         if (remain < taskDatas[i].expectation){
             duration += taskDatas[i].expectation;
