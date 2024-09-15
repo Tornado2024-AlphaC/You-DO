@@ -8,12 +8,68 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Image from 'next/image';
 import youDoAddTask from '../../../../public/add-task/Frame 100.svg';
 
+import { useUserData } from '@/components/features/use-cookies/useUserData';
+
 
 // 型定義
 type TimeUnit = '10分' | '30分' | '1時間';
 
 const AddTaskModal = () => {
-	const [taskName, setTaskName] = useState('');
+	const { getUserData } = useUserData();
+	const user_id = getUserData().user_id;
+	// POSTのAPIにアクセスする
+	const post_task_data = async (
+					user_id: string, 
+					task_name: string, 
+					limit_time: string, 
+					parent_id:string, 
+					available_break:string,
+					expectation:string ) => {
+		return new Promise((resolve, reject) => {
+			const url = `api/task`;
+			//TODO: userNameとformNameを渡せるようにAPIを変更する
+			const obj = {
+			"user_id": user_id,
+			"title": task_name,
+			"limit_time": limit_time,
+			"parent_id": parent_id,
+			"available_break": available_break,//true
+			"expectation": expectation
+			};
+		
+			try {
+			fetch(url, {
+				method: "POST",
+				headers: {
+				"Content-Type": "application/json",
+				},
+				body: JSON.stringify(obj),
+			}).then(async (res) => {
+				if (!res.ok) {
+				const statusCode = res.status;
+				switch (statusCode) {
+					case 400:
+					throw new Error("Bad Request");
+					case 500:
+					throw new Error("Internal Server Error");
+					default:
+					throw new Error("Unknown Error");
+				}
+				}
+				// okだった時ここに処理
+				const data = await res.json(); //okだった時の処理
+				resolve(data.task);
+			});
+			} catch (error) {
+			alert("エラーが発生しました。");
+			reject(null);
+			}
+	  });
+	}}
+
+
+
+	const [task_name, setTaskName] = useState('');
 	const [totalMinutes, setTotalMinutes] = useState(0);
 
 	// 時間を分単位に変換して加算する関数
@@ -48,14 +104,34 @@ const AddTaskModal = () => {
 	  };
 
 
+
+	//   タスク追加ボタンを押した後の動作（入力した情報をポストする）
+	  const task_add_API = async () => {
+		if (typeof user_id === 'string' && 
+			typeof task_name === 'string' &&
+			typeof limit_time === 'string' &&
+			typeof parent_id === 'string' &&
+			typeof tavailable_break === 'string' &&
+			typeof expectation === 'string' 
+		) {
+			// API呼び出し
+			const user_data = await post_task_data(user_id, task_name, limit_time, parent_id, tavailable_break, expectation);
+			if (!user_data) {
+				alert('P3ユーザー情報の取得に失敗しました。');
+				return;
+			}
+			setUserData(user_data.id, user_data.name, user_data.uuid);
+	  }
+
+
 	return (
 		<div>
 			<div className="flex flex-col gap-2">
 				<div>
 					<input
 						type="text"
-						id="taskName"
-						value={taskName}
+						id="task_name"
+						value={task_name}
 						placeholder="タスク名を追加"
 						className="outline-none text-lg"
 						onChange={e => setTaskName(e.target.value)}
@@ -131,7 +207,10 @@ const AddTaskModal = () => {
 					<button className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg">
 					← 戻る
 					</button>
-					<button className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg">
+					<button 
+					className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg" 
+					onClick={task_add_API}
+					>
 					＋ タスク追加
 					</button>
 				</div>
