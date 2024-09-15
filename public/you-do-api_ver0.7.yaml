@@ -864,7 +864,7 @@ paths:
                   message:
                     type: string
                     example: エラーメッセージ
-  /task/{id}:
+  /task/detail/{id}:
     get:
       tags:
         - Task

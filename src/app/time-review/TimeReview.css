@@ -1,0 +1,114 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+}
+  
+.header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 20px;
+}
+  
+.celebration-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+  
+.satisfaction {
+    background-color: #fceef1;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+  
+.satisfaction-text {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+}
+  
+.emoji-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+  
+.emoji-button {
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+  
+.emoji-button:hover {
+    background-color: #f3d4d9;
+}
+  
+.emoji-button.selected {
+    background-color: #f3d4d9;
+}
+  
+.next-time {
+    text-align: center;
+    margin-bottom: 20px;
+}
+  
+.time-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff7675;
+}
+  
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+  
+.change-time-button,
+.end-time-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.change-time-button {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+  
+.change-time-button:hover {
+    background-color: #e55d5d;
+}
+  
+.end-time-button {
+    background-color: #ee5253;
+    color: #fff;
+}
+  
+.end-time-button:hover {
+    background-color: #d74444;
+}
