@@ -130,6 +130,16 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
 	};
 
 	const save_task = () => {
+		if (
+			task_name === '' ||
+			total_minutes === 0 ||
+			selected_date === '' ||
+			selected_time === ''
+		) {
+			alert('すべての項目を入力してから、「追加」ボタンを教えてください。');
+			return;
+		}
+
 		const title = task_name;
 		const selected_date_time = selected_date + 'T' + selected_time + ':00.000';
 		const total_expectation = total_minutes * 60 * 1000;
