@@ -29,9 +29,9 @@ export const SideSwipe = ({ children }: { children: ReactNode }) => {
 	if (pathName === '/top-task') {
 		direction = 0;
 	} else if (pathName === '/daily-schedule') {
-		direction = pathName === '/top-task' ? 1 : -1;
+		direction = -1;
 	} else if (pathName === '/task-list') {
-		direction = pathName === '/top-task' ? -1 : 1;
+		direction = 1;
 	}
 	return (
 		// 画面スワイプによる画面遷移アニメーション
