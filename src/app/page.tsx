@@ -10,9 +10,28 @@ import { getUID } from '@/libs/firebase/auth';
 
 import { getDisplayName } from '@/libs/firebase/auth';
 
+import { useUserData } from '@/components/features/use-cookies/useUserData';
+
+type User = {
+	id: number;
+	name: string;
+	uuid: string;
+	gender: string;
+	birthday: string;
+	survey_file_name: string;
+	task_completed_count: number;
+	image_url: number;
+	params1: number;
+	params2: number;
+	login_at: string;
+	created_at: string;
+};
+
 export default function Home() {
+	const { setUserData } = useUserData();
+
 	// APIgetの関数
-	const get_user_data = async (uid: string) => {
+	const get_user_data = async (uid: string): Promise<User> => {
 		return new Promise((resolve, reject) => {
 			const url = `api/user/${uid}`;
 			try {
@@ -52,7 +71,7 @@ export default function Home() {
 	};
 
 	// API_post
-	const post_user_data = async (uuid: string, name: string) => {
+	const post_user_data = async (uuid: string, name: string): Promise<User> => {
 		return new Promise((resolve, reject) => {
 			const url = `api/user/`;
 			const obj = {
@@ -113,6 +132,7 @@ export default function Home() {
 						alert('P3ユーザー情報の取得に失敗しました。');
 						return;
 					}
+					setUserData(user_data.id, user_data.name, user_data.uuid);
 					router.push('/top-task'); // 初回登録情報入力ページに遷移
 				} else {
 					alert('P2ユーザー情報の取得に失敗しました。');
@@ -128,6 +148,7 @@ export default function Home() {
 						alert('P3ユーザー情報の取得に失敗しました。');
 						return;
 					}
+					setUserData(user_data.id, user_data.name, user_data.uuid);
 					router.push('/top-task'); // 初回登録情報入力ページに遷移
 					// ここに次の処理を書ける
 				} else {
