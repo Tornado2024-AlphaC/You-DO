@@ -1,5 +1,7 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import spabase from "@/libs/spabase";
+
 
 type Task = {
     id: number;
@@ -19,6 +21,7 @@ type Task = {
     updated_at: string;
 }
 
+
 type User = {
     id: number;
     uuid: string;
@@ -34,10 +37,11 @@ type User = {
 }
 
 
-export async function PUT(req: Request, { params }: { params: { user_id: string, task_id: string } }) {
+export async function PUT(req: NextApiRequest, { params }: { params: { user_id: string, task_id: string } }) {
     // パスパラメータから user_id と task_id を取得
     const userId = Number(params.user_id);
     const taskId = Number(params.task_id);
+
 
     // クエリパラメータのチェック
     if (!userId) {
@@ -47,12 +51,14 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
         }, { status: 400 });
     }
 
+
     if (isNaN(userId)) {
         return NextResponse.json({
             status: 400,
             message: "Bad Request",
         },{ status: 400 });
     }
+
 
     if (!taskId) {
         return NextResponse.json({
@@ -61,12 +67,14 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
         }, { status: 400 });
     }
 
+
     if (isNaN(taskId)) {
         return NextResponse.json({
             status: 400,
             message: "Bad Request",
         },{ status: 400 });
     }
+
 
     try {
         // ユーザーのタスクを全て取得
@@ -75,6 +83,7 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
             .select("*")
             .eq("id", userId);
 
+
         if (error) {
             return NextResponse.json({
                 status: 404,
@@ -82,10 +91,12 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
             }, { status: 404 });
         }
 
+
         const { data: taskDara, error:error2 } = await spabase
             .from("sample-Task") // タスクテーブル名
             .select("*")
             .eq("id", taskId);
+
 
         if (error2) {
             return NextResponse.json({
@@ -94,19 +105,24 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
             }, { status: 404 });
         }
 
+
         const result: User = culcParams1(userDara[0],taskDara[0]);
-       
+
+
                 // 指定されたユーザーのデータを更新
        await spabase.from("sample-User")
        .update({ params1: result.params1 })
                 .eq("id", result.id);
-        
+
+
+
 
         // 成功
         return NextResponse.json({
             status: 200,
             message: result.params1
         }, { status: 200 });
+
 
     } catch (error) {
         return NextResponse.json({
@@ -117,9 +133,8 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
     }
 }
 
-function culcParams1(userData : User,taskData : Task) {
-    const achievementRate = taskData.duration/ taskData.firstexpect;
-    const newParams = userData.params1 *0.7 + achievementRate *0.3;
-    userData.params1 = parseFloat(newParams.toFixed(3));
-    return userData;
+function culcParams2(userData : userData,timeData : timeData) {
+    const commitRate = timeData.duration / (timeData.end.getTime() - timeData.start.getTime());
+    const newParams = userData.params2 *0.8+ commitRate *0.2;
+    userData.params2 = newParams;
 }
