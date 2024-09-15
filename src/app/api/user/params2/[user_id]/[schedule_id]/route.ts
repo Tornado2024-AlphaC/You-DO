@@ -1,26 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import spabase from "@/libs/spabase";
-
-
-type Task = {
-    id: number;
-    user_id: number;
-    title: string;
-    limit_time: string;
-    parent_id: number;
-    available_break: boolean;
-    duration: number;
-    expectation: number;
-    urgency: number;
-    firstexpect: number;
-    progress: number;
-    priority: number;
-    skip_count: number;
-    created_at: string;
-    updated_at: string;
-}
-
 
 type User = {
     id: number;
@@ -36,12 +15,21 @@ type User = {
     created_at: string;
 }
 
+type Schedule = {
+    id: number;
+    user_id: number;
+    type: string;
+    start_time: string;
+    end_time: string;
+    duration: number;
+    updated_at: string;
+    created_at: string;
+}
 
-export async function PUT(req: NextApiRequest, { params }: { params: { user_id: string, task_id: string } }) {
+export async function PUT(req: Request, { params }: { params: { user_id: string, schedule_id: string } }) {
     // パスパラメータから user_id と task_id を取得
     const userId = Number(params.user_id);
-    const taskId = Number(params.task_id);
-
+    const scheduleId = Number(params.schedule_id);
 
     // クエリパラメータのチェック
     if (!userId) {
@@ -51,7 +39,6 @@ export async function PUT(req: NextApiRequest, { params }: { params: { user_id: 
         }, { status: 400 });
     }
 
-
     if (isNaN(userId)) {
         return NextResponse.json({
             status: 400,
@@ -59,30 +46,26 @@ export async function PUT(req: NextApiRequest, { params }: { params: { user_id: 
         },{ status: 400 });
     }
 
-
-    if (!taskId) {
+    if (!scheduleId) {
         return NextResponse.json({
             status: 400,
             message: "タスクIDが必要です",
         }, { status: 400 });
     }
 
-
-    if (isNaN(taskId)) {
+    if (isNaN(scheduleId)) {
         return NextResponse.json({
             status: 400,
             message: "Bad Request",
         },{ status: 400 });
     }
 
-
     try {
-        // ユーザーのタスクを全て取得
+        // ユーザーデータを取得
         const { data: userDara, error } = await spabase
-            .from("sample-User") // タスクテーブル名
+            .from("sample-User") 
             .select("*")
             .eq("id", userId);
-
 
         if (error) {
             return NextResponse.json({
@@ -91,38 +74,31 @@ export async function PUT(req: NextApiRequest, { params }: { params: { user_id: 
             }, { status: 404 });
         }
 
-
-        const { data: taskDara, error:error2 } = await spabase
-            .from("sample-Task") // タスクテーブル名
+        const { data: scheduleData, error:error2 } = await spabase
+            .from("sample-schedule")
             .select("*")
-            .eq("id", taskId);
-
+            .eq("id", scheduleId);
 
         if (error2) {
             return NextResponse.json({
                 status: 404,
-                message: "タスクが存在しません",
+                message: "スケジュールが存在しません",
             }, { status: 404 });
         }
 
-
-        const result: User = culcParams1(userDara[0],taskDara[0]);
-
-
+        const result: User = culcParams2(userDara[0],scheduleData[0]);
+       
                 // 指定されたユーザーのデータを更新
        await spabase.from("sample-User")
-       .update({ params1: result.params1 })
+       .update({ params2: result.params2 })
                 .eq("id", result.id);
-
-
-
+        
 
         // 成功
         return NextResponse.json({
             status: 200,
-            message: result.params1
+            message: result.params2
         }, { status: 200 });
-
 
     } catch (error) {
         return NextResponse.json({
@@ -133,8 +109,19 @@ export async function PUT(req: NextApiRequest, { params }: { params: { user_id: 
     }
 }
 
-function culcParams2(userData : userData,timeData : timeData) {
-    const commitRate = timeData.duration / (timeData.end.getTime() - timeData.start.getTime());
+function culcParams2(userData : User,timeData : Schedule) {
+    const commitRate = timeData.duration / (convertTimestampToMilliseconds(timeData.end_time) 
+    - convertTimestampToMilliseconds(timeData.start_time));
     const newParams = userData.params2 *0.8+ commitRate *0.2;
-    userData.params2 = newParams;
+    userData.params2 = parseFloat(newParams.toFixed(3));
+    return userData;
 }
+
+function convertTimestampToMilliseconds(timestamp: string): number {
+    // 受け取ったタイムスタンプ文字列をDateオブジェクトに変換
+    const date = new Date(timestamp);
+    
+    // Dateオブジェクトを秒に変換
+    return date.getTime()/60000;
+  }
+  
