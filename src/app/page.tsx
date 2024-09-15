@@ -14,9 +14,7 @@ export default function Home() {
 	// APIgetの関数
 	const get_user_data = async (uid: string) => {
 		return new Promise((resolve, reject) => {
-			// console.log("関数内の"+uid)
 			const url = `api/user/${uid}`;
-			// console.log("送るリクエスト"+url)
 			try {
 				fetch(url, {
 					method: 'GET',
@@ -32,29 +30,22 @@ export default function Home() {
 						}
 						switch (statusCode) {
 							case 400:
-								console.log('400のエラーが出ました。');
 								throw new Error('Bad Request');
 							case 401:
-								console.log('401のエラーが出ました。');
 								throw new Error('Unauthorized');
 							case 404:
-								console.log('404のエラーが出ました。');
 								throw new Error('Not Found');
 							case 500:
-								console.log('500のエラーが出ました。');
 								throw new Error('Internal Server Error');
 							default:
-								console.log('その他のエラーが出ました。');
 								throw new Error('Unknown Error');
 						}
 					}
 					const data = await res.json();
-					console.log('このユーザーのuserid' + data.user.id);
 					resolve(data.user);
 				});
 			} catch (error) {
 				alert('P1ユーザー情報取得中に、エラーが発生しました。');
-				console.log(error);
 				reject(null);
 			}
 		});
@@ -64,7 +55,6 @@ export default function Home() {
 	const post_user_data = async (uuid: string, name: string) => {
 		return new Promise((resolve, reject) => {
 			const url = `api/user/`;
-			//TODO: userNameとformNameを渡せるようにAPIを変更する
 			const obj = {
 				uuid: uuid,
 				name: name,
@@ -92,12 +82,10 @@ export default function Home() {
 						}
 					}
 					const data = await res.json(); //okだった時の処理
-					console.log('このユーザーのuserid' + data.user.id);
 					resolve(data.user);
 				});
 			} catch (error) {
 				alert('エラーが発生しました。');
-				console.log(error);
 				reject(null);
 			}
 		});
@@ -114,13 +102,8 @@ export default function Home() {
 
 			if (!signInResult) return;
 
-			// ここでユーザーが登録済みかどうかを確認する処理
-			//const isUserRegistered = await checkUserRegistration(user.email as string);
-
 			if (signInResult.isNewUser) {
-				// console.log("isUserRegistered == True")
 				// ユーザー登録を行うAPI
-				console.log('新規登録');
 				const user_uid = await getUID();
 				const display_name = await getDisplayName();
 				if (typeof user_uid === 'string' && typeof display_name === 'string') {
@@ -128,34 +111,23 @@ export default function Home() {
 					const user_data = await post_user_data(user_uid, display_name);
 					if (!user_data) {
 						alert('P3ユーザー情報の取得に失敗しました。');
-						console.log(user_data);
 						return;
 					}
-					// const user_data = await get_user_data(user_uid); あとで実装
-					// console.log("user_uidは、"+user_uid)
 					router.push('/top-task'); // 初回登録情報入力ページに遷移
-					// ここに次の処理を書ける
 				} else {
 					alert('P2ユーザー情報の取得に失敗しました。');
 					return;
 				}
 			} else {
-				// console.log("isUserRegistered == Folse")
 				// ユーザー情報を取得するAPI
-				console.log('ログイン');
 				const user_uid = await getUID();
 				if (typeof user_uid === 'string') {
-					// uidがstring型の場合のみ次の処理に進む
-					// console.log("user_uidは、"+user_uid)
 					// API呼び出し
 					const user_data = await get_user_data(user_uid);
 					if (!user_data) {
 						alert('P3ユーザー情報の取得に失敗しました。');
-						console.log(user_data);
 						return;
 					}
-					// console.log("userのnameは、"+JSON.stringify(user_data))
-					console.log(JSON.stringify(user_data));
 					router.push('/top-task'); // 初回登録情報入力ページに遷移
 					// ここに次の処理を書ける
 				} else {
