@@ -37,6 +37,8 @@ export async function POST(req: any) {
 
 	const body: Request = await req.json();
 
+	console.log('body: ' + JSON.stringify(body));
+
 	//いずれかのパラメータが不正な場合はエラー（簡易的なもの）
 	if (
 		!body.user_id ||
@@ -46,6 +48,7 @@ export async function POST(req: any) {
 		!body.available_break ||
 		!body.expectation
 	) {
+		console.log('API: いずれかの値がありません。');
 		return NextResponse.json(
 			{
 				status: 400,
