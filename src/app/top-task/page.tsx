@@ -38,7 +38,6 @@ const TopTask = () => {
 
 	const [taskList, setTaskList] = React.useState<Task[]>([]);
 	const [topTask, setTopTask] = React.useState<Task | null>(null);
-	const [currentTaskNo, setCurrentTaskNo] = React.useState<number>(0);
 
 	const handlers = useSwipeable({
 		onSwipedLeft: () => router.push(TaskList),
@@ -92,10 +91,9 @@ const TopTask = () => {
 				}
 				if (taskList.length === 0) {
 					alert('タスクがありません。');
-					setCurrentTaskNo(-1);
 				}
 				setTaskList(taskList);
-				setCurrentTaskNo(0);
+				setTopTask(taskList[0]);
 			} catch (error) {
 				alert('B: タスク一覧取得中にエラーが発生しました。');
 				return;
@@ -112,16 +110,16 @@ const TopTask = () => {
 					<ResetBtnDisabled />
 				</div>
 
-				{currentTaskNo >= 0 && (
+				{topTask && (
 					<TaskCard
-						task_id={taskList[currentTaskNo].id}
-						task_title={taskList[currentTaskNo].title}
-						task_progress={taskList[currentTaskNo].progress}
-						limit_time_org={taskList[currentTaskNo].limit_time}
+						task_id={taskList[0].id}
+						task_title={taskList[0].title}
+						task_progress={taskList[0].progress}
+						limit_time_org={taskList[0].limit_time}
 					/>
 				)}
 
-				{currentTaskNo < 0 && (
+				{!topTask && (
 					<p className="text-lg text-red-600">タスクがありません。</p>
 				)}
 
