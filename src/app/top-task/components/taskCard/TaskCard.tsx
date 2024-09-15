@@ -6,7 +6,7 @@ import Image from 'next/image';
 const TaskCard = () => {
 	return (
 		<div className="flex flex-col justify-center items-center w-[400px] bg-green-tertiary border-2 border-green-secondary rounded-sm shadow-sm p-3">
-			<TaskTimer />
+			<TaskTimer color={'red'} />
 			<div className="flex flex-col justify-start items-start w-[380px] text-white-primary">
 				<div className="flex items-center max-w-[380px] p-2">
 					<Image
