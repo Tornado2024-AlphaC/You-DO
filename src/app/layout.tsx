@@ -18,8 +18,9 @@ export default function RootLayout({
 		<html lang="en">
 			<head>
 				<link rel="manifest" href="/pwa/manifest.json" />
+				<link rel="icon" href="/favicon.ico" sizes="any" />
 				<link rel="apple-touch-icon" href="/pwa/icon512_maskable.png"></link>
-				<meta name="theme-color" content="#ED5E59" />
+				<meta name="theme-color" content="#333" />
 			</head>
 			<body className={mplus1p.className}>{children}</body>
 		</html>

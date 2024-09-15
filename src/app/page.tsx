@@ -167,7 +167,12 @@ export default function Home() {
 		<div className="flex flex-col items-center justify-center h-screen bg-gray-50">
 			{/* ロゴセクション */}
 			<div className="mb-8">
-				<Image src={youDoLog} alt="Logo" className="w-32 h-32" />
+				<Image
+					src={'/pwa/icon512_rounded.png'}
+					width={260}
+					height={260}
+					alt="Logo"
+				/>
 			</div>
 
 			{/* Googleログインボタン */}
