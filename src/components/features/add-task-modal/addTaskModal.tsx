@@ -123,7 +123,7 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
 					resolve(data.task);
 				});
 			} catch (error) {
-				alert('D: apiで登録中にエラーが発生しました。');
+				alert('apiで登録中にエラーが発生しました。');
 				reject(null);
 			}
 		});
@@ -152,14 +152,13 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
 				total_expectation
 			);
 			if (!taskData) {
-				alert('A: タスクが登録できませんでした。');
+				alert('タスクが登録できませんでした。');
 				return;
 			}
-			alert('B: タスクが登録されました。');
+			alert('タスクが登録されました。');
 			resetForm();
 		} catch (error) {
-			console.log(error);
-			alert('C: タスクが登録できませんでした。');
+			alert('タスクが登録できませんでした。');
 		}
 	};
 
