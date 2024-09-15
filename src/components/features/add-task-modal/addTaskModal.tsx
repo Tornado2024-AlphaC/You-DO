@@ -8,6 +8,10 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import Image from 'next/image';
 import youDoAddTask from '../../../../public/add-task/Frame 100.svg';
 
+import WorkIcon from '@mui/icons-material/Work';
+import SchoolIcon from '@mui/icons-material/School';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+
 import { useUserData } from '../use-cookies/useUserData';
 
 type Task = {
@@ -30,6 +34,11 @@ type Task = {
 
 // 型定義
 type TimeUnit = '10分' | '30分' | '1時間';
+type IconType =
+	| 'DescriptionIcon'
+	| 'WorkIcon'
+	| 'SchoolIcon'
+	| 'FitnessCenterIcon';
 
 interface AddTaskModalProps {
 	closeModal: () => void;
@@ -44,6 +53,9 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
 	const [total_minutes, set_total_minutes] = useState(0);
 	const [selected_date, set_selected_date] = useState('');
 	const [selected_time, set_selected_time] = useState('');
+	const [selectedIcon, setSelectedIcon] = useState<IconType>('DescriptionIcon'); // デフォルトアイコン
+	const [selectedColor, setSelectedColor] = useState('bg-green-300'); // デフォルト色
+	const [isIconPickerOpen, setIsIconPickerOpen] = useState(false); // アイコン選択用のフラグ
 
 	// 時間を分単位に変換して加算する関数
 	const addTime = (timeUnit: TimeUnit) => {
@@ -73,14 +85,36 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
 
 	// 取消ボタンで時間をリセットする
 	const handleCancel = () => {
-		set_total_minutes(0); // 初期値にリセット
+		resetForm();
+	};
+
+	// アイコンをレンダリングする関数
+	const renderIcon = () => {
+		switch (selectedIcon) {
+			case 'WorkIcon':
+				return <WorkIcon className="mr-2" />;
+			case 'SchoolIcon':
+				return <SchoolIcon className="mr-2" />;
+			case 'FitnessCenterIcon':
+				return <FitnessCenterIcon className="mr-2" />;
+			default:
+				return <DescriptionIcon className="mr-2" />;
+		}
+	};
+
+	// アイコン変更ボタンをクリックしたときのハンドラ
+	const toggleIconPicker = () => {
+		setIsIconPickerOpen(prev => !prev);
 	};
 
 	const resetForm = () => {
 		set_task_name('');
+		setSelectedIcon('DescriptionIcon');
+		setSelectedColor('bg-green-300');
 		set_total_minutes(0);
 		set_selected_date('');
 		set_selected_time('');
+		setIsIconPickerOpen(false);
 	};
 
 	const save_new_task = async (
@@ -183,18 +217,64 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
 					/>
 				</div>
 				<hr />
-				<div className="flex flex-row gap-3">
-					<p className="text-lg">
-						<DescriptionIcon />
-					</p>
-					<p className="text-lg">アイコンを変更</p>
+				<div className="flex items-center py-4">
+					{renderIcon()}
+					<button
+						onClick={toggleIconPicker}
+						className="flex items-center px-2 py-1 bg-green-200 text-green-600 rounded"
+					>
+						アイコンを変更
+					</button>
 				</div>
+
+				{/* アイコン選択のドロップダウン */}
+				{isIconPickerOpen && (
+					<div className="flex gap-2 mb-4">
+						<button
+							onClick={() => setSelectedIcon('DescriptionIcon')}
+							className="p-2"
+						>
+							<DescriptionIcon />
+						</button>
+						<button onClick={() => setSelectedIcon('WorkIcon')} className="p-2">
+							<WorkIcon />
+						</button>
+						<button
+							onClick={() => setSelectedIcon('SchoolIcon')}
+							className="p-2"
+						>
+							<SchoolIcon />
+						</button>
+						<button
+							onClick={() => setSelectedIcon('FitnessCenterIcon')}
+							className="p-2"
+						>
+							<FitnessCenterIcon />
+						</button>
+					</div>
+				)}
 				<hr />
-				<div className="flex flex-row gap-3">
-					<p className="text-lg">
-						<ColorLensIcon />
-					</p>
-					<p className="text-lg">アイコン色を変更</p>
+				<div className="flex justify-around py-4">
+					<div
+						onClick={() => setSelectedColor('bg-green-300')}
+						className={`w-8 h-8 ${selectedColor === 'bg-green-300' ? 'ring-2 ring-black' : ''} bg-green-300 rounded-full cursor-pointer`}
+					></div>
+					<div
+						onClick={() => setSelectedColor('bg-blue-300')}
+						className={`w-8 h-8 ${selectedColor === 'bg-blue-300' ? 'ring-2 ring-black' : ''} bg-blue-300 rounded-full cursor-pointer`}
+					></div>
+					<div
+						onClick={() => setSelectedColor('bg-purple-300')}
+						className={`w-8 h-8 ${selectedColor === 'bg-purple-300' ? 'ring-2 ring-black' : ''} bg-purple-300 rounded-full cursor-pointer`}
+					></div>
+					<div
+						onClick={() => setSelectedColor('bg-red-300')}
+						className={`w-8 h-8 ${selectedColor === 'bg-red-300' ? 'ring-2 ring-black' : ''} bg-red-300 rounded-full cursor-pointer`}
+					></div>
+					<div
+						onClick={() => setSelectedColor('bg-yellow-300')}
+						className={`w-8 h-8 ${selectedColor === 'bg-yellow-300' ? 'ring-2 ring-black' : ''} bg-yellow-300 rounded-full cursor-pointer`}
+					></div>
 				</div>
 				<hr />
 				<div className="flex flex-row gap-3">
