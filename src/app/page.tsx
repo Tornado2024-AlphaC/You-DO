@@ -100,7 +100,7 @@ export default function Home() {
 								throw new Error('Unknown Error');
 						}
 					}
-					const data = await res.json(); //okだった時の処理
+					const data = await res.json(); //okだった時の処理です
 					resolve(data.user);
 				});
 			} catch (error) {
