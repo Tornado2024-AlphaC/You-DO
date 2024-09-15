@@ -68,6 +68,7 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
         },{ status: 400 });
     }
 
+
     try {
         // ユーザーのタスクを全て取得
         const { data: userDara, error } = await spabase
@@ -94,6 +95,13 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
             }, { status: 404 });
         }
 
+        if(userDara[0].id !== taskDara[0].user_id){
+            return NextResponse.json({
+                status: 400,
+                message: "ユーザーIDとが一致しません",
+            }, { status: 400 });
+        }
+
         const result: User = culcParams1(userDara[0],taskDara[0]);
        
                 // 指定されたユーザーのデータを更新
@@ -118,8 +126,13 @@ export async function PUT(req: Request, { params }: { params: { user_id: string,
 }
 
 function culcParams1(userData : User,taskData : Task) {
+    if (taskData.firstexpect !== 0) {
     const achievementRate = taskData.duration/ taskData.firstexpect;
     const newParams = userData.params1 *0.7 + achievementRate *0.3;
     userData.params1 = parseFloat(newParams.toFixed(3));
     return userData;
+    }
+    else{
+        return userData;
+    }
 }
