@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { Profile } from '@/constants/routing';
+import { Profile, TaskList } from '@/constants/routing';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const ProfileBtn = () => {
+export const ProfileBtn = () => {
 	const router = useRouter();
 
 	const handleRoute = () => {
@@ -17,5 +17,3 @@ const ProfileBtn = () => {
 		</Button>
 	);
 };
-
-export default ProfileBtn;

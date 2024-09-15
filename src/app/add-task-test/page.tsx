@@ -4,7 +4,7 @@ const AddTaskTest = () => {
 	return (
 		<main>
 			<h1>Add Task Test</h1>
-			<AddTaskModal />
+			<AddTaskModal closeModal={() => {}} />
 		</main>
 	);
 };
