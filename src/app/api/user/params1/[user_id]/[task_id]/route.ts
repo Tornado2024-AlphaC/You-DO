@@ -1,38 +1,6 @@
 import { NextResponse } from 'next/server';
 import spabase from "@/libs/spabase";
-
-type Task = {
-    id: number;
-    user_id: number;
-    title: string;
-    limit_time: string;
-    parent_id: number;
-    available_break: boolean;
-    duration: number;
-    expectation: number;
-    urgency: number;
-    firstexpect: number;
-    progress: number;
-    priority: number;
-    skip_count: number;
-    created_at: string;
-    updated_at: string;
-}
-
-type User = {
-    id: number;
-    uuid: string;
-    gender: string;
-    birthday: string;
-    survey_file_name: string;
-    task_completed_count: number;
-    image_url: number;
-    params1: number;
-    params2: number;
-    login_at: string;
-    created_at: string;
-}
-
+import {Task,User} from "@/libs/type";
 
 export async function PUT(req: Request, { params }: { params: { user_id: string, task_id: string } }) {
     // パスパラメータから user_id と task_id を取得

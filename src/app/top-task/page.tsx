@@ -31,6 +31,8 @@ type Task = {
 	skip_count: number;
 	created_at: string;
 	updated_at: string;
+	icon: 'WorkIcon' | 'SchoolIcon' | 'FitnessCenterIcon' | 'DescriptionIcon';
+	color: 'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple';
 };
 
 type Schedule = {
@@ -75,6 +77,7 @@ const TopTask = () => {
 	const [timeDifference, setTimeDifference] = React.useState<number>(0);
 	const [scheduleInProgress, setScheduleInProgress] =
 		React.useState<boolean>(false);
+	const [useColor, setUseColor] = React.useState<string>('red');
 	const [isScheduleExist, setIsScheduleExist] = React.useState<boolean>(true);
 
 	const handlers = useSwipeable({
@@ -83,7 +86,6 @@ const TopTask = () => {
 		preventScrollOnSwipe: true,
 		trackMouse: true,
 	});
-
 
 	//API: 今やるべきタスクの一覧を取得する
 	const get_next_task_list = async (user_id: string): Promise<Task[]> => {
@@ -171,6 +173,7 @@ const TopTask = () => {
 				}
 				setTaskList(taskList);
 				setTopTask(taskList[0]);
+				setUseColor(taskList[0]['color']);
 			} catch (error) {
 				return;
 			}
@@ -185,7 +188,7 @@ const TopTask = () => {
 				}
 				if (scheduleList.length === 0) {
 					setIsScheduleExist(false);
-					return
+					return;
 				}
 				setNextSchedule(scheduleList[0]);
 				const now = new Date();
@@ -272,24 +275,27 @@ const TopTask = () => {
 		}
 	}, [nextSchedule, scheduleInProgress]);
 
+	console.log(useColor);
 	return (
 		<SideSwipe>
 			<main {...handlers}>
 				<div className="absolute top-0 my-14 space-y-4">
-				{!isScheduleExist ? (
-    			<p className="text-lg text-red-600">空き時間が登録されていません。</p>
-				//空き時間が登録されていない場合の表示(改善の余地あり)
-				) : scheduleInProgress ? (
-    				<>
-        		<InTimer time={formatTime(timeDifference)} />
-        		<ResetBtn />
-                </>
-			) : (
-    		<>
-        		<NextTimer time={formatTime(timeDifference)} />
-        		<ResetBtnDisabled />
-    			</>
-			)}
+					{!isScheduleExist ? (
+						<p className="text-lg text-red-600">
+							空き時間が登録されていません。
+						</p>
+					) : //空き時間が登録されていない場合の表示(改善の余地あり)
+					scheduleInProgress ? (
+						<>
+							<InTimer time={formatTime(timeDifference)} />
+							<ResetBtn />
+						</>
+					) : (
+						<>
+							<NextTimer time={formatTime(timeDifference)} />
+							<ResetBtnDisabled />
+						</>
+					)}
 				</div>
 
 				{topTask && (
@@ -298,6 +304,8 @@ const TopTask = () => {
 						task_title={taskList[0].title}
 						task_progress={taskList[0].progress}
 						limit_time_org={taskList[0].limit_time}
+						iconType={taskList[0].icon}
+						color={useColor}
 					/>
 				)}
 

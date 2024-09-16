@@ -13,7 +13,7 @@ import Icon from '@/components/ui/Icon';
 import { Button } from '@/components/ui/button';
 import { AddTimeBtn, DeleteTimeBtn } from './AddTimeBtn';
 
-import { motion } from 'framer-motion';
+import { color, motion } from 'framer-motion';
 
 type Task = {
 	id: number;
@@ -120,7 +120,9 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		user_id: number,
 		title: string,
 		limit_time: string,
-		expectation: number
+		expectation: number,
+		color: string,
+		icon:string
 	): Promise<Task> => {
 		return new Promise((resolve, reject) => {
 			const url = 'api/task';
@@ -131,6 +133,8 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				parent_id: 0,
 				available_break: true,
 				expectation,
+				color,
+				icon,
 			};
 
 			try {
@@ -162,7 +166,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		});
 	};
 
-	const save_task = () => {
+	const save_task = async () => {
 		if (
 			task_name === '' ||
 			total_minutes === 0 ||
@@ -182,7 +186,9 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				user_id,
 				title,
 				selected_date_time,
-				total_expectation
+				total_expectation,
+				selectedColor,
+				selectedIcon
 			);
 			if (!taskData) {
 				alert('タスクが登録できませんでした。');
@@ -192,6 +198,49 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 			resetForm();
 		} catch (error) {
 			alert('タスクが登録できませんでした。');
+		}
+
+		
+		try {
+			const response = await fetch(`/api/task/${user_id}/setpriority`, {
+				// APIエンドポイントのパスを指定
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+
+			const data = await response.json();
+			console.log('Success:', data.message);
+		} catch (error) {
+			console.error('Fetch Error:', error);
+		}
+
+		try {
+			const response = await fetch(`/api/task/${user_id}/culcUrgency`, {
+				// APIエンドポイントのパスを指定
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+
+			const data = await response.json();
+			console.log('Success:', data.result);
+		} catch (error) {
+			console.error('Fetch Error:', error);
 		}
 	};
 

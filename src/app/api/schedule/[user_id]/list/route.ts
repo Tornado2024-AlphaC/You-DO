@@ -1,16 +1,7 @@
 import { NextResponse } from "next/server";
 import spabase from "@/libs/spabase";
+import { Schedule } from "@/libs/type";
 
-type Schedule = {
-    id: number;
-    user_id: number;
-    type: string;
-    start_time: string;
-    end_time: string;
-    duration: number;
-    updated_at: string;
-    created_at: string;
-}
 
 export async function GET(_:any, { params }:{ params: { user_id: string } }) {
     if (!params.user_id) {

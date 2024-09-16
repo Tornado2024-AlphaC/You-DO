@@ -148,6 +148,8 @@ const TaskDetail = () => {
 			progress: progress,
 			priority: priority,
 			skip_count: skip_count,
+			icon: selectedIcon,
+			color: selectedColor,
 		};
 
 		try {

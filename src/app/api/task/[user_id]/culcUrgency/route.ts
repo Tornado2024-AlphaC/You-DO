@@ -1,34 +1,6 @@
 import { NextResponse } from "next/server";
 import spabase from "@/libs/spabase";
-
-type Task = {
-    id: number;
-    user_id: number;
-    title: string;
-    limit_time: string;
-    parent_id: number;
-    available_break: boolean;
-    duration: number;
-    expectation: number;
-    urgency: number;
-    firstexpect: number;
-    progress: number;
-    priority: number;
-    skip_count: number;
-    created_at: string;
-    updated_at: string;
-}
-
-type Schedule = {
-    id: number;
-    user_id: number;
-    type: string;
-    start_time: string;
-    end_time: string;
-    duration: number;
-    updated_at: string;
-    created_at: string;
-}
+import {Task,Schedule} from "@/libs/type";
 
 
 export async function PUT(req:any, { params }:any) {
