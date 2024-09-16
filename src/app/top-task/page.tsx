@@ -47,6 +47,7 @@ const TopTask = () => {
 	const [timeDifference, setTimeDifference] = React.useState<number>(0);
 	const [scheduleInProgress, setScheduleInProgress] =
 		React.useState<boolean>(false);
+	const [useColor , setUseColor] = React.useState<string>('red');
 
 	const handlers = useSwipeable({
 		onSwipedLeft: () => router.push(TaskList),
@@ -128,6 +129,7 @@ const TopTask = () => {
 		});
 	};
 
+	
 	useEffect(() => {
 		const call_get_next_task_list = async () => {
 			try {
@@ -140,6 +142,7 @@ const TopTask = () => {
 				}
 				setTaskList(taskList);
 				setTopTask(taskList[0]);
+				setUseColor(taskList[0]['color']);
 			} catch (error) {
 				alert('B: タスク一覧取得中にエラーが発生しました。');
 				return;
@@ -240,6 +243,7 @@ const TopTask = () => {
 		}
 	}, [nextSchedule, scheduleInProgress]);
 
+	console.log(useColor);
 	return (
 		<SideSwipe>
 			<main {...handlers}>
@@ -263,6 +267,8 @@ const TopTask = () => {
 						task_title={taskList[0].title}
 						task_progress={taskList[0].progress}
 						limit_time_org={taskList[0].limit_time}
+						iconType={taskList[0].icon}
+						color = {useColor}
 					/>
 				)}
 

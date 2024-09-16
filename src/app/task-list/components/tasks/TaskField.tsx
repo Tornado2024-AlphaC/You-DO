@@ -25,7 +25,7 @@ interface TaskBubbleData {
 	created_at: string;
 	updated_at: string;
 	color: 'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple',
-	icon: string
+	icon: "WorkIcon" | "SchoolIcon" | "FitnessCenterIcon" | "DescriptionIcon"
 }
 
 const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
@@ -38,6 +38,7 @@ const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
 			priority: number;
 			color: 'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple',
 			size: { bubble: string; icon: number };
+			iconType : string
 		}[]
 	>([]);
 
@@ -108,6 +109,7 @@ const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
 					priority,
 					color,
 					size: { bubble: size, icon: iconSize },
+					iconType : taskBubbleData[i].icon
 				});
 			}
 			setBubbles(newBubbles);
@@ -128,6 +130,7 @@ const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
 						color={bubble.color}
 						size={bubble.size.bubble}
 						icon={bubble.size.icon}
+						iconType={bubble.iconType}
 					/>
 				</Link>
 			))}

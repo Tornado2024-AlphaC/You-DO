@@ -26,7 +26,7 @@ type Task = {
 	skip_count: number;
 	created_at: string;
 	updated_at: string;
-	icon : string;
+	icon : "WorkIcon" | "SchoolIcon" | "FitnessCenterIcon" | "DescriptionIcon";
 	color :  'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple',
 };
 
