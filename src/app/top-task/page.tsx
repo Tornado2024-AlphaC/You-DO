@@ -13,6 +13,7 @@ import { SideSwipe } from '@/components/ui/sideSwipe';
 import { useUserData } from '@/components/features/use-cookies/useUserData';
 import NoWorkResult from 'postcss/lib/no-work-result';
 import AddTaskModal from '@/components/features/add-task-modal/addTaskModal';
+import { set } from 'date-fns';
 
 type Task = {
 	id: number;
@@ -74,6 +75,7 @@ const TopTask = () => {
 	const [timeDifference, setTimeDifference] = React.useState<number>(0);
 	const [scheduleInProgress, setScheduleInProgress] =
 		React.useState<boolean>(false);
+	const [isScheduleExist, setIsScheduleExist] = React.useState<boolean>(true);
 
 	const handlers = useSwipeable({
 		onSwipedLeft: () => router.push(TaskList),
@@ -81,6 +83,7 @@ const TopTask = () => {
 		preventScrollOnSwipe: true,
 		trackMouse: true,
 	});
+
 
 	//API: 今やるべきタスクの一覧を取得する
 	const get_next_task_list = async (user_id: string): Promise<Task[]> => {
@@ -164,11 +167,11 @@ const TopTask = () => {
 				}
 				if (taskList.length === 0) {
 					alert('タスクがありません。');
+					return;
 				}
 				setTaskList(taskList);
 				setTopTask(taskList[0]);
 			} catch (error) {
-				alert('B: タスク一覧取得中にエラーが発生しました。');
 				return;
 			}
 		};
@@ -177,10 +180,12 @@ const TopTask = () => {
 			try {
 				const scheduleList = await get_next_schedule(user_id);
 				if (!scheduleList) {
+					setIsScheduleExist(false);
 					throw new Error('ScheduleList is empty');
 				}
 				if (scheduleList.length === 0) {
-					alert('スケジュールがありません。');
+					setIsScheduleExist(false);
+					return
 				}
 				setNextSchedule(scheduleList[0]);
 				const now = new Date();
@@ -191,7 +196,7 @@ const TopTask = () => {
 					setScheduleInProgress(true);
 				}
 			} catch (error) {
-				alert('B: スケジュール一覧取得中にエラーが発生しました。');
+				setIsScheduleExist(false);
 				return;
 			}
 		};
@@ -271,17 +276,20 @@ const TopTask = () => {
 		<SideSwipe>
 			<main {...handlers}>
 				<div className="absolute top-0 my-14 space-y-4">
-					{scheduleInProgress ? (
-						<>
-							<InTimer time={formatTime(timeDifference)} />
-							<ResetBtn />
-						</>
-					) : (
-						<>
-							<NextTimer time={formatTime(timeDifference)} />
-							<ResetBtnDisabled />
-						</>
-					)}
+				{!isScheduleExist ? (
+    			<p className="text-lg text-red-600">空き時間が登録されていません。</p>
+				//空き時間が登録されていない場合の表示(改善の余地あり)
+				) : scheduleInProgress ? (
+    				<>
+        		<InTimer time={formatTime(timeDifference)} />
+        		<ResetBtn />
+                </>
+			) : (
+    		<>
+        		<NextTimer time={formatTime(timeDifference)} />
+        		<ResetBtnDisabled />
+    			</>
+			)}
 				</div>
 
 				{topTask && (
