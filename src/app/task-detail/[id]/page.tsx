@@ -35,7 +35,7 @@ type Task = {
 const convertTimestampToDateAndTime = (dateStr: string) => {
 	const date = new Date(dateStr); // 秒単位のtimestampをミリ秒に変換
 	//UTC時間と判定されて9時間戻されてしまうため　　9時間の部分消しました。以下のコード
-	date.setHours(date.getHours());
+	date.setHours(date.getHours()+24);
 	const dueDate = date.toISOString().split('T')[0]; // YYYY-MM-DD形式の文字列を抽出
 	const dueTime = date.toTimeString().split(':').slice(0, 2).join(':'); // HH:MM形式の時間を抽出
 	return { dueDate, dueTime };
