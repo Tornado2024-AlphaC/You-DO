@@ -41,7 +41,7 @@ export async function POST(req: any) {
 
 	try {
 		const { data, error } = await spabase
-			.from('sample-Schedule')
+			.from('sample-schedule')
 			.insert([insertObj])
 			.select();
 		if (error) {
