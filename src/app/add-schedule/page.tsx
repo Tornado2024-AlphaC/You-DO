@@ -31,7 +31,7 @@ const PostSchedule = () => {
 
 	// 時間をリセットする関数
 	const handleCancel = () => {
-		router.push('/task-list');
+		router.push('/daily-schedule');
 	};
 
 	const save_schedule = async (
