@@ -7,9 +7,15 @@ interface TaskCardProps {
 	id: number;
 	taskName: string;
 	progress: number; // Progress percentage (e.g., 10)
+	limit_time: string;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ id, taskName, progress }) => {
+const TaskCard: React.FC<TaskCardProps> = ({
+	id,
+	taskName,
+	progress,
+	limit_time,
+}) => {
 	const router = useRouter();
 
 	// Handler for the detail button
@@ -23,7 +29,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ id, taskName, progress }) => {
 			<div className="flex items-center w-full mb-2">
 				<FiCheckCircle className="text-white text-3xl mr-2" />{' '}
 				{/* Circular Check Icon */}
-				<span className="text-white text-lg">{`タスク名${taskName}`}</span>
+				<span className="text-white text-lg">{taskName}</span>
+			</div>
+
+			{/* Limit Time */}
+			<div className="w-full mb-1">
+				<span className="text-white text-sm">納期: {limit_time}</span>
 			</div>
 
 			{/* Progress Bar */}
