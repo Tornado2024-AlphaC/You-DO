@@ -76,7 +76,12 @@ const TaskDetail = () => {
 			const taskData = await getTaskData('1'); // IDは任意で変更可能
 			if (taskData) {
 				setTaskName(taskData.title || '');
-				setTotalMinutes(taskData.totalMinutes || 0);
+				if (taskData.expectation) {
+					const min = convertToMin(taskData.expectation);
+					setTotalMinutes(min);
+				} else {
+					setTotalMinutes(0);
+				}
 				setSelectedIcon(taskData.icon || 'DescriptionIcon');
 				setSelectedColor(taskData.color || 'bg-green-300');
 				setProgress(taskData.progress || 50);
@@ -92,6 +97,12 @@ const TaskDetail = () => {
 
 		loadTaskData();
 	}, []);
+
+	//ミリ秒で与えられた時間を、分単位にして返す関数
+	const convertToMin = (ms: number) => {
+		const minutes = ms / 60000;
+		return minutes;
+	};
 
 	// 時間を分単位に変換して加算する関数
 	const addTime = (timeUnit: TimeUnit) => {
