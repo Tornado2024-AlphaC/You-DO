@@ -11,10 +11,16 @@ import SchoolIcon from '@mui/icons-material/School';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 import { useParams } from 'next/navigation';
+import ColorPicker from '@/components/features/add-task-modal/ColorPicker';
+import Icon from '@/components/ui/Icon';
+import {
+	AddTimeBtn,
+	DeleteTimeBtn,
+} from '@/components/features/add-task-modal/AddTimeBtn';
+import { Button } from '@/components/ui/button';
 import { set } from 'date-fns';
 
 // 型定義
-type TimeUnit = '10分' | '30分' | '1時間';
 type IconType =
 	| 'DescriptionIcon'
 	| 'WorkIcon'
@@ -30,6 +36,16 @@ type Task = {
 	timestamp: number; // APIで返ってくるtimestamp
 	totalMinutes: number;
 };
+
+const COLORS: string[] = [
+	'green',
+	'sky',
+	'blue',
+	'purple',
+	'red',
+	'orange',
+	'yellow',
+];
 
 // timestampを日付と時間に分ける関数
 const convertTimestampToDateAndTime = (dateStr: string) => {
@@ -224,7 +240,7 @@ const TaskDetail = () => {
 	};
 
 	// 時間を分単位に変換して加算する関数
-	const addTime = (timeUnit: TimeUnit) => {
+	const addTime = (timeUnit: string) => {
 		let minutesToAdd = 0;
 		switch (timeUnit) {
 			case '10分':
@@ -236,13 +252,16 @@ const TaskDetail = () => {
 			case '1時間':
 				minutesToAdd = 60;
 				break;
+			case '取消':
+				setTotalMinutes(0);
+				break;
 			default:
 				break;
 		}
 		setTotalMinutes(prev => prev + minutesToAdd);
 	};
 
-	// 時間をリセットする関数
+	// タスクの変更を取り消すときの関数
 	const handleCancel = () => {
 		router.push('/task-list');
 	};
@@ -262,32 +281,30 @@ const TaskDetail = () => {
 	};
 
 	return (
-		<div className="w-full max-w-sm mx-auto p-4 bg-white rounded-lg shadow-md">
+		<div className="w-full max-w-[500px]">
 			{/* タスク名入力 */}
-			<div className="mb-4">
-				<input
-					type="text"
-					value={taskName}
-					placeholder="タスク名を追加"
-					className="w-full p-2 border border-gray-300 rounded outline-none text-lg"
-					onChange={e => setTaskName(e.target.value)}
-				/>
-			</div>
+			<input
+				type="text"
+				id="taskName"
+				value={taskName}
+				placeholder="タスク名を追加"
+				className="outline-none text-lg w-full border-b border-white-tertiary p-3 px-5"
+				onChange={e => setTaskName(e.target.value)}
+			/>
+			<hr />
 
-			{/* アイコン選択 */}
-			<div className="flex items-center py-4">
-				{renderIcon()}
-				<button
-					onClick={() => setIsIconPickerOpen(prev => !prev)}
-					className="flex items-center px-2 py-1 bg-green-200 text-green-600 rounded"
-				>
-					アイコンを変更
-				</button>
-			</div>
+			<span
+				onClick={() => setIsIconPickerOpen(prev => !prev)}
+				className="cursor-pointer"
+			>
+				<div className="flex justify-start items-center w-full border-b-2 border-white-tertiary p-3 px-5">
+					{renderIcon()}アイコンを変更
+				</div>
+			</span>
 
 			{/* アイコン選択のドロップダウン */}
 			{isIconPickerOpen && (
-				<div className="flex gap-2 mb-4">
+				<div className="flex items-ceter justify-between p-2 bg-white-tertiary">
 					<button
 						onClick={() => setSelectedIcon('DescriptionIcon')}
 						className="p-2"
@@ -308,121 +325,96 @@ const TaskDetail = () => {
 					</button>
 				</div>
 			)}
-
-			{/* 色選択 */}
-			<div className="flex justify-around py-4">
-				<div
-					onClick={() => setSelectedColor('bg-green-300')}
-					className={`w-8 h-8 ${selectedColor === 'bg-green-300' ? 'ring-2 ring-black' : ''} bg-green-300 rounded-full cursor-pointer`}
-				></div>
-				<div
-					onClick={() => setSelectedColor('bg-blue-300')}
-					className={`w-8 h-8 ${selectedColor === 'bg-blue-300' ? 'ring-2 ring-black' : ''} bg-blue-300 rounded-full cursor-pointer`}
-				></div>
-				<div
-					onClick={() => setSelectedColor('bg-purple-300')}
-					className={`w-8 h-8 ${selectedColor === 'bg-purple-300' ? 'ring-2 ring-black' : ''} bg-purple-300 rounded-full cursor-pointer`}
-				></div>
-				<div
-					onClick={() => setSelectedColor('bg-red-300')}
-					className={`w-8 h-8 ${selectedColor === 'bg-red-300' ? 'ring-2 ring-black' : ''} bg-red-300 rounded-full cursor-pointer`}
-				></div>
-				<div
-					onClick={() => setSelectedColor('bg-yellow-300')}
-					className={`w-8 h-8 ${selectedColor === 'bg-yellow-300' ? 'ring-2 ring-black' : ''} bg-yellow-300 rounded-full cursor-pointer`}
-				></div>
+			{/* タスクカラー選択 */}
+			<div className="flex justify-between items-center w-full border-b-2 border-white-tertiary p-3 px-5">
+				{COLORS.map(color => (
+					<ColorPicker
+						key={color}
+						color={color}
+						selectedColor={selectedColor}
+						setSelectedColor={setSelectedColor}
+					/>
+				))}
 			</div>
-
-			{/* 納期 */}
-			<div className="flex items-center py-4">
-				<EventAvailableIcon className="mr-2" />
-				<span className="text-lg">納期</span>
-			</div>
-			<div className="flex gap-2 mb-4">
-				<input
-					type="date"
-					className="border border-gray-300 rounded p-2"
-					value={dueDate}
-					onChange={e => setDueDate(e.target.value)}
-				/>
-				<input
-					type="time"
-					className="border border-gray-300 rounded p-2"
-					value={dueTime}
-					onChange={e => setDueTime(e.target.value)}
-				/>
+			{/* 納期設定 */}
+			<div className="flex flex-col justify-center items-center p-3 w-full border-b-2 border-white-tertiary px-5">
+				<div className="flex items-center justify-start mb-2 w-full">
+					<Icon iconRoute="add-task" iconName="deadline" size={24} />
+					<h3 className="text-white-secondary font-medium">納期</h3>
+				</div>
+				<div className="flex flex-row items-center justify-between w-full">
+					<input
+						type="date"
+						value={dueDate}
+						onChange={e => setDueDate(e.target.value)}
+					/>
+					<input
+						type="time"
+						value={dueTime}
+						onChange={e => setDueDate(e.target.value)}
+					/>
+				</div>
+				<hr />
 			</div>
 
 			{/* 所要時間 */}
-			<div className="flex items-center mb-4">
-				<AccessTimeIcon className="w-6 h-6 mr-2" />
-				<h3 className="text-gray-700 font-medium">所要時間</h3>
-				<span className="text-green-600 ml-auto">
-					{Math.floor(totalMinutes / 60)}時間 {totalMinutes % 60}分
-				</span>
-			</div>
+			<div className="flex flex-col justify-center items-center p-3 w-full border-b-2 border-white-tertiary px-5">
+				<div className="flex items-center justify-between mb-4 w-full">
+					<Icon iconRoute="add-task" iconName="timer" size={24} />
+					<h3 className="text-white-secondary font-medium">所要時間</h3>
+					<span className="text-green-tertiary ml-auto">
+						{Math.floor(totalMinutes / 60)}時間 {totalMinutes % 60}分
+					</span>
+				</div>
 
-			<div className="flex gap-2 mb-6">
-				<button
-					onClick={() => addTime('10分')}
-					className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-				>
-					10分
-				</button>
-				<button
-					onClick={() => addTime('30分')}
-					className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-				>
-					30分
-				</button>
-				<button
-					onClick={() => addTime('1時間')}
-					className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-				>
-					1時間
-				</button>
+				<div className="flex items-center justify-between w-full">
+					<AddTimeBtn addTime={addTime} timeUnit="10分" />
+					<AddTimeBtn addTime={addTime} timeUnit="30分" />
+					<AddTimeBtn addTime={addTime} timeUnit="1時間" />
+					<DeleteTimeBtn addTime={addTime} timeUnit="取消" />
+				</div>
 			</div>
 
 			{/* 進捗 */}
-			<div className="flex items-center mb-4">
-				<CheckCircleOutlineIcon className="w-6 h-6 mr-2" />
-				<span className="text-lg">進捗</span>
-				<input
-					type="range"
-					min="0"
-					max="100"
-					value={progress}
-					onChange={e => setProgress(Number(e.target.value))}
-					className="ml-auto"
-				/>
-				<span className="ml-2">{progress}%</span>
+			<div className="flex flex-col justify-center items-center p-3 w-full border-b-2 border-white-tertiary px-5">
+				<div className="flex items-center justify-start mb-4 w-full">
+					<Icon iconRoute="add-task" iconName="progress" size={24} />
+					<h3 className="text-white-secondary font-medium">進捗</h3>
+				</div>
+				<div className="flex items-center justify-between w-full">
+					<input
+						type="range"
+						min="0"
+						max="100"
+						value={progress}
+						onChange={e => setProgress(Number(e.target.value))}
+						className="w-[300px]"
+					/>
+					<span className="ml-2 text-green-tertiary text-base">
+						{progress}%
+					</span>
+				</div>
 			</div>
 
-			{/* キャンセルボタン */}
-			<div className="flex gap-4">
-				<button
-					onClick={handleCancel}
-					className="px-4 py-2 bg-red-200 text-red-600 rounded-full"
+			<div className="z-30 absolute flex justify-between items-center bottom-0 w-full max-w-[500px]">
+				<Button onClick={handleCancel}>
+					<Icon iconRoute="add-task" iconName="back" size={24} />
+					戻る
+				</Button>
+				<Button
+					onClick={() => alert('削除')}
+					className="bg-red-primary text-red-secondary border-red-secondary"
 				>
-					キャンセル
-				</button>
-				<button
-					onClick={() => handleSave()}
-					className="px-4 py-2 bg-blue-200 text-blue-600 rounded-full"
-				>
+					<Icon iconRoute="add-task" iconName="delete" size={24} />
+					削除
+				</Button>
+				<Button onClick={() => alert('保存')}>
+					<Icon iconRoute="add-task" iconName="save" size={24} />
 					保存
-				</button>
+				</Button>
 			</div>
 		</div>
 	);
 };
 
 export default TaskDetail;
-
-// import React from 'react';
-
-// const TaskDetail = () => {
-// 	return <div>TaskDetail</div>;
-// };
-
-// export default TaskDetail;

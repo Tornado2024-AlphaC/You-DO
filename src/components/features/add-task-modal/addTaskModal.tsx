@@ -2,17 +2,18 @@
 import { useState } from 'react';
 
 import DescriptionIcon from '@mui/icons-material/Description';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-
-import Image from 'next/image';
-import youDoAddTask from '../../../../public/add-task/Frame 100.svg';
 
 import WorkIcon from '@mui/icons-material/Work';
 import SchoolIcon from '@mui/icons-material/School';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 import { useUserData } from '../use-cookies/useUserData';
+import ColorPicker from './ColorPicker';
+import Icon from '@/components/ui/Icon';
+import { Button } from '@/components/ui/button';
+import { AddTimeBtn, DeleteTimeBtn } from './AddTimeBtn';
+
+import { motion } from 'framer-motion';
 
 type Task = {
 	id: number;
@@ -33,7 +34,6 @@ type Task = {
 };
 
 // 型定義
-type TimeUnit = '10分' | '30分' | '1時間';
 type IconType =
 	| 'DescriptionIcon'
 	| 'WorkIcon'
@@ -47,14 +47,19 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 	//フォームの入力内容
 	const [task_name, set_task_name] = useState('');
 	const [total_minutes, set_total_minutes] = useState(0);
-	const [selected_date, set_selected_date] = useState('');
-	const [selected_time, set_selected_time] = useState('');
+	// 現在日時の翌日を取得
+	const [selected_date, set_selected_date] = useState(
+		new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+			.toISOString()
+			.slice(0, 10)
+	);
+	const [selected_time, set_selected_time] = useState('23:59');
 	const [selectedIcon, setSelectedIcon] = useState<IconType>('DescriptionIcon'); // デフォルトアイコン
 	const [selectedColor, setSelectedColor] = useState('bg-green-300'); // デフォルト色
 	const [isIconPickerOpen, setIsIconPickerOpen] = useState(false); // アイコン選択用のフラグ
 
 	// 時間を分単位に変換して加算する関数
-	const addTime = (timeUnit: TimeUnit) => {
+	const addTime = (timeUnit: string) => {
 		let minutesToAdd = 0;
 		switch (timeUnit) {
 			case '10分':
@@ -65,6 +70,9 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				break;
 			case '1時間':
 				minutesToAdd = 60;
+				break;
+			case '取消':
+				resetForm();
 				break;
 			default:
 				break;
@@ -77,11 +85,6 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		const hours = Math.floor(minutes / 60);
 		const mins = minutes % 60;
 		return `${hours > 0 ? `${hours}時間` : ''}${mins}分`;
-	};
-
-	// 取消ボタンで時間をリセットする
-	const handleCancel = () => {
-		resetForm();
 	};
 
 	// アイコンをレンダリングする関数
@@ -192,40 +195,45 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		}
 	};
 
+	const COLORS: string[] = [
+		'green',
+		'sky',
+		'blue',
+		'purple',
+		'red',
+		'orange',
+		'yellow',
+	];
+
 	return (
-		<div className="bg-white">
-			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-xl font-semibold">タスクの追加</h2>
-				{/* モーダルを閉じるボタン */}
-				<button onClick={closeModal} className="text-red-500">
-					閉じる
-				</button>
-			</div>
-			<div className="flex flex-col gap-2">
-				<div>
-					<input
-						type="text"
-						id="taskName"
-						value={task_name}
-						placeholder="タスク名を追加"
-						className="outline-none text-lg w-full border-b border-gray-300 pb-2"
-						onChange={e => set_task_name(e.target.value)}
-					/>
-				</div>
+		// framer-motionでモーダルを下からスライドイン
+		<motion.div
+			initial={{ y: '100vh' }}
+			animate={{ y: 0 }}
+			exit={{ y: '100vh' }}
+			transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+			className="fixed bottom-0 z-50 bg-white-primary w-full max-w-[500px] p-3 rounded-sm shadow-lg"
+		>
+			<div className="flex flex-col">
+				<input
+					type="text"
+					id="taskName"
+					value={task_name}
+					placeholder="タスク名を追加"
+					className="outline-none text-lg w-full border-b border-white-tertiary p-3"
+					onChange={e => set_task_name(e.target.value)}
+				/>
 				<hr />
-				<div className="flex items-center py-4">
-					{renderIcon()}
-					<button
-						onClick={toggleIconPicker}
-						className="flex items-center px-2 py-1 bg-green-200 text-green-600 rounded"
-					>
-						アイコンを変更
-					</button>
-				</div>
+
+				<span onClick={toggleIconPicker} className="cursor-pointer">
+					<div className="flex justify-start items-center w-full border-b-2 border-white-tertiary p-3">
+						{renderIcon()}アイコンを変更
+					</div>
+				</span>
 
 				{/* アイコン選択のドロップダウン */}
 				{isIconPickerOpen && (
-					<div className="flex gap-2 mb-4">
+					<div className="flex items-ceter justify-between p-2 bg-white-tertiary">
 						<button
 							onClick={() => setSelectedIcon('DescriptionIcon')}
 							className="p-2"
@@ -249,250 +257,69 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 						</button>
 					</div>
 				)}
-				<hr />
-				<div className="flex justify-around py-4">
-					<div
-						onClick={() => setSelectedColor('bg-green-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-green-300' ? 'ring-2 ring-black' : ''} bg-green-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-blue-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-blue-300' ? 'ring-2 ring-black' : ''} bg-blue-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-purple-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-purple-300' ? 'ring-2 ring-black' : ''} bg-purple-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-red-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-red-300' ? 'ring-2 ring-black' : ''} bg-red-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-yellow-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-yellow-300' ? 'ring-2 ring-black' : ''} bg-yellow-300 rounded-full cursor-pointer`}
-					></div>
+				{/* タスクカラー選択 */}
+				<div className="flex justify-between items-center w-full border-b-2 border-white-tertiary p-3">
+					{COLORS.map(color => (
+						<ColorPicker
+							key={color}
+							color={color}
+							selectedColor={selectedColor}
+							setSelectedColor={setSelectedColor}
+						/>
+					))}
 				</div>
-				<hr />
-				<div className="flex flex-row gap-3">
-					<p className="text-lg">
-						<EventAvailableIcon />
-					</p>
-					<p className="text-lg">納期を設定</p>
-				</div>
-				<div className="flex flex-row gap-3">
-					<input
-						type="date"
-						value={selected_date}
-						onChange={e => set_selected_date(e.target.value)}
-					/>
-					<input
-						type="time"
-						value={selected_time}
-						onChange={e => set_selected_time(e.target.value)}
-					/>
-				</div>
-				<hr />
-			</div>
-
-			<div className="p-4">
-				<div className="flex items-center mb-4">
-					<Image
-						src={youDoAddTask}
-						alt="時計アイコン"
-						className="w-8 h-8 mr-2"
-					/>
-					<h3 className="text-gray-700 font-medium">所要時間</h3>
-					<span className="text-green-600 ml-auto">
-						{formatTime(total_minutes)}
-					</span>
+				{/* 納期設定 */}
+				<div className="flex flex-col justify-center items-center p-3 w-full border-b-2 border-white-tertiary">
+					<div className="flex items-center justify-start mb-2 w-full">
+						<Icon iconRoute="add-task" iconName="deadline" size={24} />
+						<h3 className="text-white-secondary font-medium">納期</h3>
+					</div>
+					<div className="flex flex-row items-center justify-between w-full">
+						<input
+							type="date"
+							value={selected_date}
+							onChange={e => set_selected_date(e.target.value)}
+						/>
+						<input
+							type="time"
+							value={selected_time}
+							onChange={e => set_selected_time(e.target.value)}
+						/>
+					</div>
+					<hr />
 				</div>
 
-				<div className="flex gap-2 mb-6">
-					<button
-						onClick={() => addTime('10分')}
-						className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-					>
-						10分
-					</button>
-					<button
-						onClick={() => addTime('30分')}
-						className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-					>
-						30分
-					</button>
-					<button
-						onClick={() => addTime('1時間')}
-						className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-					>
-						1時間
-					</button>
-					<button
-						onClick={handleCancel}
-						className="px-4 py-2 bg-red-400 text-white rounded-full"
-					>
-						取消
-					</button>
+				{/* 所要時間 */}
+				<div className="flex flex-col justify-center items-center p-3 w-full border-b-2 border-white-tertiary">
+					<div className="flex items-center justify-between mb-4 w-full">
+						<Icon iconRoute="add-task" iconName="timer" size={24} />
+						<h3 className="text-white-secondary font-medium">所要時間</h3>
+						<span className="text-green-tertiary ml-auto">
+							{formatTime(total_minutes)}
+						</span>
+					</div>
+					<div className="flex items-center justify-between w-full">
+						<AddTimeBtn addTime={addTime} timeUnit="10分" />
+						<AddTimeBtn addTime={addTime} timeUnit="30分" />
+						<AddTimeBtn addTime={addTime} timeUnit="1時間" />
+						<DeleteTimeBtn addTime={addTime} timeUnit="取消" />
+					</div>
 				</div>
 
+				{/* footer */}
 				<div className="flex justify-between">
-					<button
-						onClick={closeModal}
-						className="flex items-center justify-center px-6 py-2 bg-gray-400 text-white rounded-lg"
-					>
-						← 戻る
-					</button>
-					<button
-						className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg"
-						onClick={save_task}
-					>
-						＋ タスク追加
-					</button>
+					<Button onClick={closeModal}>
+						<Icon iconRoute="add-task" iconName="back" size={24} />
+						戻る
+					</Button>
+					<Button onClick={save_task}>
+						<Icon iconRoute="icons" iconName="plus" size={24} />
+						タスク追加
+					</Button>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 
 export default AddTaskModal;
-
-// 'use client';
-// import { useState } from 'react';
-
-// import DescriptionIcon from '@mui/icons-material/Description';
-// import ColorLensIcon from '@mui/icons-material/ColorLens';
-// import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-
-// import Image from 'next/image';
-// import youDoAddTask from '../../../../public/add-task/Frame 100.svg';
-
-// // 型定義
-// type TimeUnit = '10分' | '30分' | '1時間';
-
-// const AddTaskModal = () => {
-// 	const [taskName, setTaskName] = useState('');
-// 	const [totalMinutes, setTotalMinutes] = useState(0);
-
-// 	// 時間を分単位に変換して加算する関数
-// 	const addTime = (timeUnit: TimeUnit) => {
-// 		let minutesToAdd = 0;
-// 		switch (timeUnit) {
-// 		  case '10分':
-// 			minutesToAdd = 10;
-// 			break;
-// 		  case '30分':
-// 			minutesToAdd = 30;
-// 			break;
-// 		  case '1時間':
-// 			minutesToAdd = 60;
-// 			break;
-// 		  default:
-// 			break;
-// 		}
-// 		setTotalMinutes(prev => prev + minutesToAdd);
-// 	  };
-
-// 	  // 所要時間の分を時間と分の形式に変換する関数
-// 	  const formatTime = (minutes: number): string => {
-// 		const hours = Math.floor(minutes / 60);
-// 		const mins = minutes % 60;
-// 		return `${hours > 0 ? `${hours}時間` : ''}${mins}分`;
-// 	  };
-
-// 	  // 取消ボタンで時間をリセットする
-// 	  const handleCancel = () => {
-// 		setTotalMinutes(0); // または初期値にリセット
-// 	  };
-
-// 	return (
-// 		<div>
-// 			<div className="flex flex-col gap-2">
-// 				<div>
-// 					<input
-// 						type="text"
-// 						id="taskName"
-// 						value={taskName}
-// 						placeholder="タスク名を追加"
-// 						className="outline-none text-lg"
-// 						onChange={e => setTaskName(e.target.value)}
-// 					/>
-// 				</div>
-// 				<hr />
-// 				<div className="flex flex-row gap-3">
-// 					<p className="text-lg">
-// 						<DescriptionIcon />
-// 					</p>
-// 					<p className="text-lg">アイコンを変更</p>
-// 				</div>
-// 				<hr />
-// 				<div className="flex flex-row gap-3">
-// 					<p className="text-lg">
-// 						<ColorLensIcon />
-// 					</p>
-// 					<p className="text-lg">アイコン色を変更</p>
-// 				</div>
-// 				<hr />
-// 				<div className="flex flex-row gap-3">
-// 					<p className="text-lg">
-// 						<EventAvailableIcon />
-// 					</p>
-// 					<p className="text-lg">納期を設定</p>
-// 				</div>
-// 				<div className="flex flex-row gap-3">
-// 					<input type="date" />
-// 					<input type="time" />
-// 				</div>
-// 				<hr />
-
-// 			</div>
-// 			<div className="p-4">
-// 				<div className="flex items-center mb-4">
-// 					<Image
-// 						src={youDoAddTask}
-// 						alt="時計アイコン"
-// 						className="w-8 h-8 mr-2"
-// 					/>
-// 					<h3 className="text-gray-700 font-medium">所要時間</h3>
-// 					<span className="text-green-600 ml-auto">{formatTime(totalMinutes)}</span>
-// 				</div>
-
-// 				<div className="flex gap-2 mb-6">
-// 					<button
-// 					onClick={() => addTime('10分')}
-// 					className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-// 					>
-// 					10分
-// 					</button>
-// 					<button
-// 					onClick={() => addTime('30分')}
-// 					className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-// 					>
-// 					30分
-// 					</button>
-// 					<button
-// 					onClick={() => addTime('1時間')}
-// 					className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-// 					>
-// 					1時間
-// 					</button>
-// 					<button
-// 					onClick={handleCancel}
-// 					className="px-4 py-2 bg-red-400 text-white rounded-full"
-// 					>
-// 					取消
-// 					</button>
-// 				</div>
-
-// 				<div className="flex justify-between">
-// 					<button className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg">
-// 					← 戻る
-// 					</button>
-// 					<button className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg">
-// 					＋ タスク追加
-// 					</button>
-// 				</div>
-// 			</div>
-// 		</div>
-// 	);
-// };
-
-// export default AddTaskModal;
