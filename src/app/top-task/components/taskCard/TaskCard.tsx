@@ -18,9 +18,9 @@ const TaskCard = (props: Props) => {
 	//limit_timeは日付型に変換する
 	const limit_time = new Date(limit_time_org);
 	const limit_time_str = `${limit_time.getFullYear()}年${limit_time.getMonth() + 1}月${limit_time.getDate()}日(${week[limit_time.getDay()]})・${limit_time.getHours()}:${limit_time.getMinutes()}`;
-	const dital_page = (task_id:number) => {
+	const dital_page = (task_id: number) => {
 		// 次のタスクのページへ遷移
-		router.push(`/task/detail/${task_id}`);
+		router.push(`/task-detail/${task_id}`);
 	};
 	return (
 		<div className="flex flex-col justify-center items-center w-[400px] bg-green-tertiary border-2 border-green-secondary rounded-sm shadow-sm p-3">
