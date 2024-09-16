@@ -65,7 +65,6 @@ const TaskDetail = () => {
 			const data = await response.json();
 			return data.task;
 		} catch (error) {
-			console.error('Error fetching task data:', error);
 			return null;
 		}
 	};
