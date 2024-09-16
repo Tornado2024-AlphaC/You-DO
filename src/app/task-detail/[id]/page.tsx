@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import DescriptionIcon from '@mui/icons-material/Description';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -9,7 +10,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import SchoolIcon from '@mui/icons-material/School';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
-import { useUserData } from '@/components/features/use-cookies/useUserData';
+import { useParams } from 'next/navigation';
 
 // 型定義
 type TimeUnit = '10分' | '30分' | '1時間';
@@ -30,15 +31,21 @@ type Task = {
 };
 
 // timestampを日付と時間に分ける関数
-const convertTimestampToDateAndTime = (timestamp: number) => {
-	const date = new Date(timestamp * 1000); // 秒単位のtimestampをミリ秒に変換
+const convertTimestampToDateAndTime = (dateStr: string) => {
+	const date = new Date(dateStr); // 秒単位のtimestampをミリ秒に変換
+	//UTC時間と判定されて9時間戻されてしまうため
+	date.setHours(date.getHours() - 9);
 	const dueDate = date.toISOString().split('T')[0]; // YYYY-MM-DD形式の文字列を抽出
 	const dueTime = date.toTimeString().split(':').slice(0, 2).join(':'); // HH:MM形式の時間を抽出
 	return { dueDate, dueTime };
 };
 
 const TaskDetail = () => {
-	const { setUserData } = useUserData();
+	//パスパラメータに含まれるidを取得する
+	const { id } = useParams();
+	const task_id = id as string;
+	const router = useRouter();
+
 	const [taskName, setTaskName] = useState('');
 	const [totalMinutes, setTotalMinutes] = useState(0);
 	const [selectedIcon, setSelectedIcon] = useState<IconType>('DescriptionIcon');
@@ -65,7 +72,6 @@ const TaskDetail = () => {
 			const data = await response.json();
 			return data.task;
 		} catch (error) {
-			console.error('Error fetching task data:', error);
 			return null;
 		}
 	};
@@ -73,25 +79,39 @@ const TaskDetail = () => {
 	useEffect(() => {
 		// 初回ロード時にAPIからデータを取得してstateに設定
 		const loadTaskData = async () => {
-			const taskData = await getTaskData('1'); // IDは任意で変更可能
+			const taskData = await getTaskData(task_id); // IDは任意で変更可能
 			if (taskData) {
 				setTaskName(taskData.title || '');
-				setTotalMinutes(taskData.totalMinutes || 0);
+				if (taskData.expectation) {
+					const min = convertToMin(taskData.expectation);
+					setTotalMinutes(min);
+				} else {
+					setTotalMinutes(0);
+				}
 				setSelectedIcon(taskData.icon || 'DescriptionIcon');
 				setSelectedColor(taskData.color || 'bg-green-300');
-				setProgress(taskData.progress || 50);
+				setProgress(taskData.progress);
 
 				// タイムスタンプから日付と時間を分割
 				const { dueDate, dueTime } = convertTimestampToDateAndTime(
-					taskData.timestamp
+					taskData.limit_time
 				);
 				setDueDate(dueDate);
 				setDueTime(dueTime);
+			} else {
+				alert('タスク取得中にエラーが発生しました。前のページに戻ります。');
+				router.push('/task-list');
 			}
 		};
 
 		loadTaskData();
 	}, []);
+
+	//ミリ秒で与えられた時間を、分単位にして返す関数
+	const convertToMin = (ms: number) => {
+		const minutes = ms / 60000;
+		return minutes;
+	};
 
 	// 時間を分単位に変換して加算する関数
 	const addTime = (timeUnit: TimeUnit) => {
@@ -114,13 +134,7 @@ const TaskDetail = () => {
 
 	// 時間をリセットする関数
 	const handleCancel = () => {
-		setTotalMinutes(0);
-		setTaskName('');
-		setSelectedIcon('DescriptionIcon');
-		setSelectedColor('bg-green-300');
-		setProgress(50);
-		setDueDate('');
-		setDueTime('');
+		router.push('/task-list');
 	};
 
 	// アイコンをレンダリングする関数

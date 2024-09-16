@@ -149,7 +149,7 @@ const TopTask = () => {
 					resolve(data.scheduleList);
 				});
 			} catch (error) {
-				alert('A:タスク一覧取得中にエラーが発生しました。');
+				alert('A:スケジュール取得中にエラーが発生しました。');
 				reject(error);
 			}
 		});
@@ -245,7 +245,6 @@ const TopTask = () => {
 			
 		}
 	  }, [nextSchedule,scheduleInProgress]);
-
 
 	return (
 		<SideSwipe>
