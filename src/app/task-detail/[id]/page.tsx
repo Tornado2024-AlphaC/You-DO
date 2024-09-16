@@ -10,6 +10,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 import { useUserData } from '@/components/features/use-cookies/useUserData';
+import { useParams } from 'next/navigation';
 
 // 型定義
 type TimeUnit = '10分' | '30分' | '1時間';
@@ -40,7 +41,10 @@ const convertTimestampToDateAndTime = (dateStr: string) => {
 };
 
 const TaskDetail = () => {
-	const { setUserData } = useUserData();
+	//パスパラメータに含まれるidを取得する
+	const { id } = useParams();
+	const task_id = id as string;
+
 	const [taskName, setTaskName] = useState('');
 	const [totalMinutes, setTotalMinutes] = useState(0);
 	const [selectedIcon, setSelectedIcon] = useState<IconType>('DescriptionIcon');
@@ -74,7 +78,7 @@ const TaskDetail = () => {
 	useEffect(() => {
 		// 初回ロード時にAPIからデータを取得してstateに設定
 		const loadTaskData = async () => {
-			const taskData = await getTaskData('1'); // IDは任意で変更可能
+			const taskData = await getTaskData(task_id); // IDは任意で変更可能
 			if (taskData) {
 				setTaskName(taskData.title || '');
 				if (taskData.expectation) {
@@ -85,7 +89,7 @@ const TaskDetail = () => {
 				}
 				setSelectedIcon(taskData.icon || 'DescriptionIcon');
 				setSelectedColor(taskData.color || 'bg-green-300');
-				setProgress(taskData.progress || 50);
+				setProgress(taskData.progress);
 
 				// タイムスタンプから日付と時間を分割
 				const { dueDate, dueTime } = convertTimestampToDateAndTime(
