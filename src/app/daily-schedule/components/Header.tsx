@@ -32,6 +32,10 @@ const Header = () => {
 				<span className="ml-2">納期</span>
 			</Button>
 
+			<Button onClick={() => router.push('/add-schedule')}>
+				<span className="ml-2">追加</span>
+			</Button>
+
 			{/* 三項演算子 */}
 			{/* isModalがtrueの場合、Calendarコンポーネントを表示 */}
 			{isModal && (
