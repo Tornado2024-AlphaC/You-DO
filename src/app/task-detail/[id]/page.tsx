@@ -9,7 +9,6 @@ import WorkIcon from '@mui/icons-material/Work';
 import SchoolIcon from '@mui/icons-material/School';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
-import { useUserData } from '@/components/features/use-cookies/useUserData';
 import { useParams } from 'next/navigation';
 
 // 型定義
