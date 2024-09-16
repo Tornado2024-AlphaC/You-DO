@@ -17,7 +17,8 @@ const TaskCard = (props: Props) => {
 	const week = ['日', '月', '火', '水', '木', '金', '土'];
 	//limit_timeは日付型に変換する
 	const limit_time = new Date(limit_time_org);
-	const limit_time_str = `${limit_time.getFullYear()}年${limit_time.getMonth() + 1}月${limit_time.getDate()}日(${week[limit_time.getDay()]})・${limit_time.getHours()}:${limit_time.getMinutes()}`;
+	const limit_time_str = `${limit_time.getFullYear()}年${limit_time.getMonth() + 1}月${limit_time.getDate()}日(${week[limit_time.getDay()]})・
+							${String(limit_time.getHours()).padStart(2,"0")}:${String(limit_time.getMinutes()).padStart(2,"0")}`;
 	const dital_page = (task_id: number) => {
 		// 次のタスクのページへ遷移
 		router.push(`/task-detail/${task_id}`);
