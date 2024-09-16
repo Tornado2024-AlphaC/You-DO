@@ -2,6 +2,7 @@ import React from 'react';
 import TaskTimer from '../timer/TaskTimer';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 type Props = {
 	task_id: number;
@@ -11,11 +12,16 @@ type Props = {
 };
 
 const TaskCard = (props: Props) => {
+	const router = useRouter();
 	const { task_title, task_progress, limit_time_org } = props;
 	const week = ['日', '月', '火', '水', '木', '金', '土'];
 	//limit_timeは日付型に変換する
 	const limit_time = new Date(limit_time_org);
 	const limit_time_str = `${limit_time.getFullYear()}年${limit_time.getMonth() + 1}月${limit_time.getDate()}日(${week[limit_time.getDay()]})・${limit_time.getHours()}:${limit_time.getMinutes()}`;
+	const dital_page = (task_id: number) => {
+		// 次のタスクのページへ遷移
+		router.push(`/task-detail/${task_id}`);
+	};
 	return (
 		<div className="flex flex-col justify-center items-center w-[400px] bg-green-tertiary border-2 border-green-secondary rounded-sm shadow-sm p-3">
 			<TaskTimer color={'red'} />
@@ -60,7 +66,8 @@ const TaskCard = (props: Props) => {
 			<div>
 				<Button
 					className="px-10 py-2"
-					onClick={() => alert('編集ボタンが押されました' + props.task_id)}
+					onClick={() => dital_page(props.task_id)}
+					// onClick={() => alert('編集ボタンが押されました' + props.task_id)}
 				>
 					<Image
 						src={'icons/edit.svg'}
