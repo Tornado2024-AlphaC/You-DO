@@ -1,19 +1,6 @@
 import { NextResponse } from "next/server";
 import spabase from "@/libs/spabase";
-
-type User = {
-    id: number;
-    uuid: string;
-    gender: string;
-    birthday: string;
-    survey_file_name: string;
-    task_completed_count: number;
-    image_url: number;
-    params1: number;
-    params2: number;
-    login_at: string;
-    created_at: string;
-}
+import { User } from "@/libs/type";
 
 export async function GET(_:any, { params }:{ params: { uuid: string } }) {
     if (!params.uuid) {

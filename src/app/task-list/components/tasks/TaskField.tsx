@@ -24,6 +24,8 @@ interface TaskBubbleData {
 	skip_count: number;
 	created_at: string;
 	updated_at: string;
+	color: 'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple',
+	icon: string
 }
 
 const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
@@ -34,20 +36,20 @@ const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
 			id: number;
 			urgency: number;
 			priority: number;
-			color: string;
+			color: 'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple',
 			size: { bubble: string; icon: number };
 		}[]
 	>([]);
 
-	const TASK_COLORS = [
-		'bg-red-primary border-red-secondary',
-		'bg-orange-primary border-orange-secondary',
-		'bg-yellow-primary border-yellow-secondary',
-		'bg-green-primary border-green-secondary',
-		'bg-sky-primary border-sky-secondary',
-		'bg-blue-primary border-blue-secondary',
-		'bg-purple-primary border-purple-secondary',
-	];
+	const TASK_COLORS = {
+		red : 'bg-red-primary border-red-secondary',
+		orange : 'bg-orange-primary border-orange-secondary',
+		yellow : 'bg-yellow-primary border-yellow-secondary',
+		green : 'bg-green-primary border-green-secondary',
+		sky : 'bg-sky-primary border-sky-secondary',
+		blue : 'bg-blue-primary border-blue-secondary',
+		purple :'bg-purple-primary border-purple-secondary',
+	};
 	const ICON_SIZE = [80, 70, 60, 50, 40, 30, 20];
 	const TASK_SIZE = [
 		'w-[160px] h-[160px]',
@@ -93,8 +95,9 @@ const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
 				attempts++;
 			}
 			if (isValidPosition) {
+				const colorName:'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple' = taskBubbleData[i].color;
 				const color =
-					TASK_COLORS[Math.floor(Math.random() * TASK_COLORS.length)];
+					TASK_COLORS[colorName];
 				const sizeIndex = Math.floor(Math.random() * TASK_SIZE.length);
 				const size = TASK_SIZE[sizeIndex];
 				const iconSize = ICON_SIZE[sizeIndex];

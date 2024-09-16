@@ -130,6 +130,8 @@ const TaskDetail = () => {
 			progress: progress,
 			priority: priority,
 			skip_count: skip_count,
+			icon : selectedIcon,
+			color : selectedColor
 		};
 
 		try {
@@ -408,7 +410,7 @@ const TaskDetail = () => {
 					<Icon iconRoute="add-task" iconName="delete" size={24} />
 					削除
 				</Button>
-				<Button onClick={() => alert('保存')}>
+				<Button onClick={() => handleSave()}>
 					<Icon iconRoute="add-task" iconName="save" size={24} />
 					保存
 				</Button>

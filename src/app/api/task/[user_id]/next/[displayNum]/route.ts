@@ -1,23 +1,7 @@
 import { NextResponse } from 'next/server';
 import spabase from '@/libs/spabase';
+import { Task } from '@/libs/type';
 
-type Task = {
-	id: number;
-	user_id: number;
-	title: string;
-	limit_time: string;
-	parent_id: number;
-	available_break: boolean;
-	duration: number;
-	expectation: number;
-	urgency: number;
-	firstexpect: number;
-	progress: number;
-	priority: number;
-	skip_count: number;
-	created_at: string;
-	updated_at: string;
-};
 
 export async function GET(_: any, { params }: { params: { user_id: string,displayNum :string } }) {
 	if (!params.user_id) {

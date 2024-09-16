@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import spabase from '@/libs/spabase';
+import { color } from 'framer-motion';
 
 type Request = {
 	user_id: string;
@@ -8,6 +9,8 @@ type Request = {
 	parent_id: number | null;
 	available_break: boolean;
 	expectation: number;
+	icon: string;
+	color: string;
 };
 
 type PutRequest = {
@@ -22,6 +25,8 @@ type PutRequest = {
 	progress: number;
 	priority: number;
 	skip_count: number;
+	icon: string;
+	color: string;
 };
 
 export async function POST(req: any) {
@@ -67,10 +72,12 @@ export async function POST(req: any) {
 		duration: 0,
 		expectation: body.expectation,
 		urgency: 0,
-		firstexpect: 0,
+		firstexpect: body.expectation,
 		progress: 0,
 		priority: 1,
 		skip_count: 0,
+		icon: body.icon,
+		color: body.color,
 	};
 
 	try {
@@ -143,6 +150,8 @@ export async function PUT(req: any) {
 		progress: body.progress,
 		priority: body.priority,
 		skip_count: body.skip_count,
+		color: body.color,
+		icon: body.icon
 	};
 
 	try {

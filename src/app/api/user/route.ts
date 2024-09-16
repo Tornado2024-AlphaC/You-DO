@@ -34,8 +34,8 @@ export async function POST(req:any) {
         survey_file_name: "",
         task_completed_count: 0,
         image_url: "https://picsum.photos/200",
-        params1: 0,
-        params2: 0,
+        params1: 1,
+        params2: 1,
     };
 
     try {

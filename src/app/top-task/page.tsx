@@ -13,35 +13,8 @@ import { SideSwipe } from '@/components/ui/sideSwipe';
 import { useUserData } from '@/components/features/use-cookies/useUserData';
 import NoWorkResult from 'postcss/lib/no-work-result';
 import AddTaskModal from '@/components/features/add-task-modal/addTaskModal';
+import {Task, Schedule} from '@/libs/type';
 
-type Task = {
-	id: number;
-	user_id: number;
-	title: string;
-	limit_time: string;
-	parent_id: number;
-	available_break: boolean;
-	duration: number;
-	expectation: number;
-	urgency: number;
-	firstexpect: number;
-	progress: number;
-	priority: number;
-	skip_count: number;
-	created_at: string;
-	updated_at: string;
-};
-
-type Schedule = {
-	id: number;
-	user_id: number;
-	type: string;
-	start_time: string;
-	end_time: string;
-	duration: number;
-	updated_at: string;
-	created_at: string;
-};
 
 function convertTimestampToMilliseconds(timestamp: string): number {
 	// 受け取ったタイムスタンプ文字列をDateオブジェクトに変換

@@ -26,6 +26,8 @@ type Task = {
 	skip_count: number;
 	created_at: string;
 	updated_at: string;
+	icon : string;
+	color :  'red' | 'orange' | 'yellow' | 'green' | 'sky' | 'blue' | 'purple',
 };
 
 type Schedule = {
