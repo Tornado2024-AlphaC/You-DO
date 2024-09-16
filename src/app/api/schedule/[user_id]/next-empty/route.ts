@@ -48,9 +48,7 @@ export async function GET(_:any, { params }: { params: { user_id: string } }) {
 
         if (data.length === 0) {
             return NextResponse.json({
-                status: 404,
-                message: "Data not found",
-            },{ status: 404 });
+                scheduleList: []});
         }
         //１個目：現在または直近のスケジュール、２個目：その次のスケジュール
         const scheduleList: Schedule[] = data;
