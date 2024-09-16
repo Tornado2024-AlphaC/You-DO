@@ -85,8 +85,11 @@ const TaskCard = (props: Props) => {
 					/>
 					<div className="flex flex-row justify-center items-center space-x-[12px]">
 						<div className="relative w-[230px] h-3 border-2 border-white-primary bg-white-primary rounded-full">
-							{/* 進捗率（Widthで調整） */}
-							<span className="absolute top-0 bg-green-tertiary h-[11px] w-[23px] rounded-full" />
+						<div
+						className="absolute top-0 bg-green-tertiary h-[11px]  rounded-full"
+						style={{ width: `${task_progress}%` }} // Dynamic width based on progress
+					></div>
+							{/*<span className="absolute top-0 bg-green-tertiary h-[11px] w-[230px] rounded-full" />*/}
 						</div>
 						<p>{task_progress}%</p>
 					</div>
