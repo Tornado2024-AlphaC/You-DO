@@ -2,16 +2,38 @@
 
 import React, { useEffect, useState } from 'react';
 import TaskBubble from './TaskBubble';
+import Link from 'next/link';
 
 interface TaskFieldProps {
-	taskTotal: number;
+	taskBubbleData: TaskBubbleData[];
 }
 
-const TaskField = ({ taskTotal }: TaskFieldProps) => {
+interface TaskBubbleData {
+	id: number;
+	user_id: number;
+	title: string;
+	limit_time: string;
+	parent_id: number;
+	available_break: boolean;
+	duration: number;
+	expectation: number;
+	urgency: number;
+	firstexpect: number;
+	progress: number;
+	priority: number;
+	skip_count: number;
+	created_at: string;
+	updated_at: string;
+}
+
+const TaskField = ({ taskBubbleData }: TaskFieldProps) => {
 	const [bubbles, setBubbles] = useState<
 		{
 			x: number;
 			y: number;
+			id: number;
+			urgency: number;
+			priority: number;
 			color: string;
 			size: { bubble: string; icon: number };
 		}[]
@@ -54,10 +76,14 @@ const TaskField = ({ taskTotal }: TaskFieldProps) => {
 
 	const generateBubbles = () => {
 		const newBubbles = [];
-		for (let i = 0; i < taskTotal; i++) {
+		console.log(taskBubbleData);
+		for (let i = 0; i < taskBubbleData.length; i++) {
 			let position: any;
 			let isValidPosition = false;
 			let attempts = 0;
+			let id: number = taskBubbleData[i].id;
+			let urgency: number = taskBubbleData[i].urgency;
+			let priority: number = taskBubbleData[i].priority;
 			const maxAttempts = 300; // 配置試行回数の制限
 			while (!isValidPosition && attempts < maxAttempts) {
 				position = generateRandomPosition();
@@ -74,6 +100,9 @@ const TaskField = ({ taskTotal }: TaskFieldProps) => {
 				const iconSize = ICON_SIZE[sizeIndex];
 				newBubbles.push({
 					...position,
+					id,
+					urgency,
+					priority,
 					color,
 					size: { bubble: size, icon: iconSize },
 				});
@@ -83,19 +112,21 @@ const TaskField = ({ taskTotal }: TaskFieldProps) => {
 	};
 	useEffect(() => {
 		generateBubbles();
-	}, [taskTotal]);
+	}, [taskBubbleData]);
 
 	return (
 		<div className="relative w-full h-full">
 			{bubbles.map((bubble, index) => (
-				<TaskBubble
-					key={index}
-					x={bubble.x}
-					y={bubble.y}
-					color={bubble.color}
-					size={bubble.size.bubble}
-					icon={bubble.size.icon}
-				/>
+				<Link key={index} href={`/task-detail/${bubble.id}`}>
+					<TaskBubble
+						key={index}
+						x={bubble.x}
+						y={bubble.y}
+						color={bubble.color}
+						size={bubble.size.bubble}
+						icon={bubble.size.icon}
+					/>
+				</Link>
 			))}
 		</div>
 	);

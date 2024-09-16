@@ -101,7 +101,7 @@ const TaskList = () => {
 	return (
 		<SideSwipe>
 			<main {...handlers}>
-				<TaskField taskTotal={formListLen} />
+				<TaskField taskBubbleData={taskList} />
 				{/* InTimer：空き時間中、NextTimer：空き時間外 */}
 				{/* <NextTimer /> */}
 				<InTimer />
