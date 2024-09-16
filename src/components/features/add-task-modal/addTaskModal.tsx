@@ -31,11 +31,7 @@ type Task = {
 // 型定義
 type TimeUnit = '10分' | '30分' | '1時間';
 
-interface AddTaskModalProps {
-	closeModal: () => void;
-}
-
-const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
+const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 	const { getUserData } = useUserData();
 	const user_id = Number(getUserData().user_id);
 
