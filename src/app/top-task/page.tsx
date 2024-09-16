@@ -139,6 +139,8 @@ const TopTask = () => {
 								throw new Error('Bad Request');
 							case 500:
 								throw new Error('Internal Server Error');
+							case 404:
+								throw new Error('Data not found');
 							default:
 								throw new Error('Unknown Error');
 						}
