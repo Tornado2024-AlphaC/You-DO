@@ -53,6 +53,7 @@ const TaskList = () => {
 	const [nextSchedule, setNextSchedule] = React.useState<Schedule | null>(null);
 	const [timeDifference, setTimeDifference] = React.useState<number>(0);
 	const [scheduleInProgress,setScheduleInProgress] = React.useState<boolean>(false);
+	const [isScheduleExist, setIsScheduleExist] = React.useState<boolean>(true);
 
 	
 	function convertTimestampToMilliseconds(timestamp: string): number {
@@ -168,18 +169,23 @@ const TaskList = () => {
 			try {
 				const scheduleList = await get_next_schedule(user_id);
 				if (!scheduleList) {
+					setIsScheduleExist(false);
 					throw new Error('ScheduleList is empty');
 				}
 				if (scheduleList.length === 0) {
-					alert('スケジュールがありません。');
+					setIsScheduleExist(false);
+					return
 				}
 				setNextSchedule(scheduleList[0]);
 				const now = new Date();
-				if(convertTimestampToMilliseconds(scheduleList[0].start_time)<now.getTime()){
+				if (
+					convertTimestampToMilliseconds(scheduleList[0].start_time) <
+					now.getTime()
+				) {
 					setScheduleInProgress(true);
 				}
 			} catch (error) {
-				alert('B: スケジュール一覧取得中にエラーが発生しました。');
+				setIsScheduleExist(false);
 				return;
 			}
 		};
@@ -246,9 +252,20 @@ const TaskList = () => {
 		<SideSwipe>
 			<main {...handlers}>
 				<TaskField taskBubbleData={taskList} />
-				{/* InTimer：空き時間中、NextTimer：空き時間外 */}
-				{/* <NextTimer /> */}
-				{scheduleInProgress ? <InTimer time={formatTime(timeDifference)} /> : <NextTimer time={formatTime(timeDifference)} />}	
+				
+				{!isScheduleExist ? (
+				<div className="absolute m-auto">
+    			<p className="text-lg text-red-600">空き時間が登録されていません。</p>
+				</div>//空き時間が登録されていない場合の表示(改善の余地あり)
+				) : scheduleInProgress ? (
+    				<>
+        		<InTimer time={formatTime(timeDifference)} />
+                </>
+			) : (
+    		<>
+        		<NextTimer time={formatTime(timeDifference)} />
+    			</>
+			)}
       			
 				<Footer />
 			</main>

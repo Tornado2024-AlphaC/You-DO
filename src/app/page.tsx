@@ -182,7 +182,7 @@ export default function Home() {
 				className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-100 disabled:opacity-50"
 			>
 				<span className="text-gray-700">
-					{loading ? 'ログイン中...' : 'Googleログイン'}
+					{loading ? 'ログイン中...' : 'Googleでログイン'}
 				</span>
 			</button>
 		</div>

@@ -13,8 +13,7 @@ import { SideSwipe } from '@/components/ui/sideSwipe';
 import { useUserData } from '@/components/features/use-cookies/useUserData';
 import NoWorkResult from 'postcss/lib/no-work-result';
 import AddTaskModal from '@/components/features/add-task-modal/addTaskModal';
-import {Task, Schedule} from '@/libs/type';
-
+import { set } from 'date-fns';
 
 function convertTimestampToMilliseconds(timestamp: string): number {
 	// 受け取ったタイムスタンプ文字列をDateオブジェクトに変換
@@ -47,7 +46,8 @@ const TopTask = () => {
 	const [timeDifference, setTimeDifference] = React.useState<number>(0);
 	const [scheduleInProgress, setScheduleInProgress] =
 		React.useState<boolean>(false);
-	const [useColor , setUseColor] = React.useState<string>('red');
+	const [useColor, setUseColor] = React.useState<string>('red');
+	const [isScheduleExist, setIsScheduleExist] = React.useState<boolean>(true);
 
 	const handlers = useSwipeable({
 		onSwipedLeft: () => router.push(TaskList),
@@ -129,7 +129,6 @@ const TopTask = () => {
 		});
 	};
 
-	
 	useEffect(() => {
 		const call_get_next_task_list = async () => {
 			try {
@@ -139,12 +138,12 @@ const TopTask = () => {
 				}
 				if (taskList.length === 0) {
 					alert('タスクがありません。');
+					return;
 				}
 				setTaskList(taskList);
 				setTopTask(taskList[0]);
 				setUseColor(taskList[0]['color']);
 			} catch (error) {
-				alert('B: タスク一覧取得中にエラーが発生しました。');
 				return;
 			}
 		};
@@ -153,10 +152,12 @@ const TopTask = () => {
 			try {
 				const scheduleList = await get_next_schedule(user_id);
 				if (!scheduleList) {
+					setIsScheduleExist(false);
 					throw new Error('ScheduleList is empty');
 				}
 				if (scheduleList.length === 0) {
-					alert('スケジュールがありません。');
+					setIsScheduleExist(false);
+					return;
 				}
 				setNextSchedule(scheduleList[0]);
 				const now = new Date();
@@ -167,7 +168,7 @@ const TopTask = () => {
 					setScheduleInProgress(true);
 				}
 			} catch (error) {
-				alert('B: スケジュール一覧取得中にエラーが発生しました。');
+				setIsScheduleExist(false);
 				return;
 			}
 		};
@@ -248,7 +249,12 @@ const TopTask = () => {
 		<SideSwipe>
 			<main {...handlers}>
 				<div className="absolute top-0 my-14 space-y-4">
-					{scheduleInProgress ? (
+					{!isScheduleExist ? (
+						<p className="text-lg text-red-600">
+							空き時間が登録されていません。
+						</p>
+					) : //空き時間が登録されていない場合の表示(改善の余地あり)
+					scheduleInProgress ? (
 						<>
 							<InTimer time={formatTime(timeDifference)} />
 							<ResetBtn />
@@ -268,7 +274,7 @@ const TopTask = () => {
 						task_progress={taskList[0].progress}
 						limit_time_org={taskList[0].limit_time}
 						iconType={taskList[0].icon}
-						color = {useColor}
+						color={useColor}
 					/>
 				)}
 

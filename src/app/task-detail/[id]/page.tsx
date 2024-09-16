@@ -51,7 +51,7 @@ const COLORS: string[] = [
 const convertTimestampToDateAndTime = (dateStr: string) => {
 	const date = new Date(dateStr); // 秒単位のtimestampをミリ秒に変換
 	//UTC時間と判定されて9時間戻されてしまうため　　9時間の部分消しました。以下のコード
-	date.setHours(date.getHours()+24);
+	date.setHours(date.getHours() + 24);
 	const dueDate = date.toISOString().split('T')[0]; // YYYY-MM-DD形式の文字列を抽出
 	const dueTime = date.toTimeString().split(':').slice(0, 2).join(':'); // HH:MM形式の時間を抽出
 	return { dueDate, dueTime };
@@ -117,6 +117,24 @@ const TaskDetail = () => {
 		}
 	};
 
+	const deleteTaskData = async (id: string) => {
+		try {
+			const response = await fetch(`/api/task/delete/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to delete task data');
+			}
+			return true;
+		} catch (error) {
+			return false;
+		}
+	};
+
 	const handleSave = async () => {
 		const updateData = {
 			id: task_id,
@@ -130,8 +148,8 @@ const TaskDetail = () => {
 			progress: progress,
 			priority: priority,
 			skip_count: skip_count,
-			icon : selectedIcon,
-			color : selectedColor
+			icon: selectedIcon,
+			color: selectedColor,
 		};
 
 		try {
@@ -268,6 +286,17 @@ const TaskDetail = () => {
 		router.push('/task-list');
 	};
 
+	//タスクの削除を行う関数
+	const handleDelete = async () => {
+		const isDeleted = await deleteTaskData(task_id);
+		if (isDeleted) {
+			alert('削除完了！');
+			router.push('/task-list');
+		} else {
+			alert('削除に失敗しました');
+		}
+	};
+
 	// アイコンをレンダリングする関数
 	const renderIcon = () => {
 		switch (selectedIcon) {
@@ -353,7 +382,7 @@ const TaskDetail = () => {
 					<input
 						type="time"
 						value={dueTime}
-						onChange={e => setDueDate(e.target.value)}
+						onChange={e => setDueTime(e.target.value)}
 					/>
 				</div>
 				<hr />
@@ -404,13 +433,13 @@ const TaskDetail = () => {
 					戻る
 				</Button>
 				<Button
-					onClick={() => alert('削除')}
+					onClick={handleDelete}
 					className="bg-red-primary text-red-secondary border-red-secondary"
 				>
 					<Icon iconRoute="add-task" iconName="delete" size={24} />
 					削除
 				</Button>
-				<Button onClick={() => handleSave()}>
+				<Button onClick={handleSave}>
 					<Icon iconRoute="add-task" iconName="save" size={24} />
 					保存
 				</Button>
