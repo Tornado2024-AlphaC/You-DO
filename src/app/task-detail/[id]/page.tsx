@@ -18,6 +18,7 @@ import {
 	DeleteTimeBtn,
 } from '@/components/features/add-task-modal/AddTimeBtn';
 import { Button } from '@/components/ui/button';
+import { set } from 'date-fns';
 
 // 型定義
 type IconType =
@@ -49,11 +50,28 @@ const COLORS: string[] = [
 // timestampを日付と時間に分ける関数
 const convertTimestampToDateAndTime = (dateStr: string) => {
 	const date = new Date(dateStr); // 秒単位のtimestampをミリ秒に変換
-	//UTC時間と判定されて9時間戻されてしまうため
-	date.setHours(date.getHours() - 9);
+	//UTC時間と判定されて9時間戻されてしまうため　　9時間の部分消しました。以下のコード
+	date.setHours(date.getHours());
 	const dueDate = date.toISOString().split('T')[0]; // YYYY-MM-DD形式の文字列を抽出
 	const dueTime = date.toTimeString().split(':').slice(0, 2).join(':'); // HH:MM形式の時間を抽出
 	return { dueDate, dueTime };
+};
+
+const convertDateAndTimeToTimestamp = (
+	dueDate: string,
+	dueTime: string
+): string => {
+	// 日付と時間を組み合わせてISO 8601形式の文字列を作成
+	const combinedDateTime = `${dueDate}T${dueTime}:00`; // "YYYY-MM-DDTHH:MM:00"
+
+	// Dateオブジェクトを日本時間として解釈
+	const jstDate = new Date(combinedDateTime);
+
+	// JSTをUTCに変換するために9時間進める
+	jstDate.setHours(jstDate.getHours() + 9);
+
+	// ISO 8601形式の文字列を返す
+	return jstDate.toISOString();
 };
 
 const TaskDetail = () => {
@@ -70,6 +88,13 @@ const TaskDetail = () => {
 	const [dueDate, setDueDate] = useState('');
 	const [dueTime, setDueTime] = useState('');
 	const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
+	const [user_id, setUserId] = useState('');
+	const [limit_time, setLimitTime] = useState('');
+	const [parent_id, setParentId] = useState('');
+	const [available_break, setAvailableBreak] = useState(true);
+	const [duration, setDuration] = useState(0);
+	const [priority, setPriority] = useState('Medium');
+	const [skip_count, setSkipCount] = useState(1);
 
 	// APIからデータを取得する関数
 	const getTaskData = async (id: string) => {
@@ -92,6 +117,84 @@ const TaskDetail = () => {
 		}
 	};
 
+	const handleSave = async () => {
+		const updateData = {
+			id: task_id,
+			user_id: user_id,
+			title: taskName,
+			limit_time: convertDateAndTimeToTimestamp(dueDate, dueTime),
+			parent_id: parent_id,
+			available_break: available_break,
+			duration: duration,
+			expectation: Math.floor(totalMinutes * 60000),
+			progress: progress,
+			priority: priority,
+			skip_count: skip_count,
+		};
+
+		try {
+			const response = await fetch('/api/task', {
+				// APIエンドポイントに合わせてパスを変更
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(updateData),
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+			alert('保存完了！');
+		} catch (error) {
+			console.error('Fetch Error:', error);
+		}
+
+		try {
+			const response = await fetch(`/api/task/${user_id}/setpriority`, {
+				// APIエンドポイントのパスを指定
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+
+			const data = await response.json();
+			console.log('Success:', data.message);
+		} catch (error) {
+			console.error('Fetch Error:', error);
+		}
+
+		try {
+			const response = await fetch(`/api/task/${user_id}/culcUrgency`, {
+				// APIエンドポイントのパスを指定
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+
+			const data = await response.json();
+			console.log('Success:', data.result);
+		} catch (error) {
+			console.error('Fetch Error:', error);
+		}
+	};
+
 	useEffect(() => {
 		// 初回ロード時にAPIからデータを取得してstateに設定
 		const loadTaskData = async () => {
@@ -107,6 +210,13 @@ const TaskDetail = () => {
 				setSelectedIcon(taskData.icon || 'DescriptionIcon');
 				setSelectedColor(taskData.color || 'bg-green-300');
 				setProgress(taskData.progress);
+				setUserId(taskData.user_id);
+				setLimitTime(taskData.limit_time);
+				setParentId(taskData.parent_id);
+				setAvailableBreak(taskData.available_break);
+				setDuration(taskData.duration);
+				setPriority(taskData.priority);
+				setSkipCount(taskData.skip_count);
 
 				// タイムスタンプから日付と時間を分割
 				const { dueDate, dueTime } = convertTimestampToDateAndTime(
@@ -125,7 +235,7 @@ const TaskDetail = () => {
 
 	//ミリ秒で与えられた時間を、分単位にして返す関数
 	const convertToMin = (ms: number) => {
-		const minutes = ms / 60000;
+		const minutes = Math.round(ms / 60000);
 		return minutes;
 	};
 
@@ -286,7 +396,6 @@ const TaskDetail = () => {
 				</div>
 			</div>
 
-			{/* キャンセルボタン */}
 			<div className="z-30 absolute flex justify-between items-center bottom-0 w-full max-w-[500px]">
 				<Button onClick={handleCancel}>
 					<Icon iconRoute="add-task" iconName="back" size={24} />

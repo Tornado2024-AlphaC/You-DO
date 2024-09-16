@@ -81,7 +81,7 @@ export async function PUT(req:any, { params }:any) {
             }, { status: 404 });
         }
 
-        const jst = new Date().toLocaleString("ja-JP", {timeZone: "Asia/Tokyo"});
+        const jst = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
         const now = new Date(jst);
         const nowHour = now.getHours();
         const nowMinute = now.getMinutes();
@@ -94,7 +94,7 @@ export async function PUT(req:any, { params }:any) {
 
         //現在時刻より終了時間が後のスケジュールを取得
         const { data:scheduleData, error :error3 } = 
-        await spabase.from("sample-schedule").select("*").limit(2).eq("user_id", userId).gt("end_time", nowTime).order("start_time");
+        await spabase.from("sample-schedule").select("*").eq("user_id", userId).gt("end_time", nowTime).order("start_time");
 
         if (error3) {
             throw error3;
@@ -111,8 +111,9 @@ export async function PUT(req:any, { params }:any) {
 
         const selectedTasks:Task[] = tasks.filter(task => task.progress !== 100);//未完のタスク
         
-        const resultTask:Task[] = culcUrgency(selectedTasks, scheduleList, userdata[0].params2);
-    
+        const resultTask:Task[] = culcUrgency(selectedTasks, scheduleList, userdata[0].params2).result;
+        const durationList:number[] = culcUrgency(selectedTasks, scheduleList, userdata[0].params2).durationList;
+        const remainList:number[] = culcUrgency(selectedTasks, scheduleList, userdata[0].params2).remainList;
 
         const updatePromises = resultTask.map((task, index) => {
             return spabase
@@ -127,7 +128,7 @@ export async function PUT(req:any, { params }:any) {
         return NextResponse.json({
             status: 200,
             message: "Success",
-            result : resultTask
+            result : remainList
         }, { status: 200 });
 
     } catch (error) {
@@ -143,7 +144,7 @@ function convertTimestampToMilliseconds(timestamp: string): number {
     const date = new Date(timestamp);
     
     // Dateオブジェクトを秒に変換
-    return date.getTime()/60000;
+    return date.getTime();
   }
   
 
@@ -151,6 +152,8 @@ function culcUrgency(taskDatas:Task[], timeDatas:Schedule[], params2:number){
     taskDatas.sort((a,b) => a.priority - b.priority);
     timeDatas.sort((a,b) => convertTimestampToMilliseconds(a.start_time) - convertTimestampToMilliseconds(b.start_time));
     let duration :number = 0;
+    const remainList:number[] = [];
+    const durationList:number[] = [];
     for (let i = 0; i < taskDatas.length; i++){
         let remain:number = 0;
         for (let j = 0; j < timeDatas.length; j++){
@@ -168,6 +171,7 @@ function culcUrgency(taskDatas:Task[], timeDatas:Schedule[], params2:number){
             }
         }
         remain -= duration;
+        remainList.push(remain);
         if(remain ===0){
             remain =1;
         }
@@ -181,9 +185,10 @@ function culcUrgency(taskDatas:Task[], timeDatas:Schedule[], params2:number){
         else{
             duration += taskDatas[i].expectation/params2;
         }
+        durationList.push(duration);
     }
 
-    return taskDatas;
+    return {result:taskDatas, durationList:durationList, remainList:remainList};
 }
 
 function categorizeValue(value: number, param:number): number {
