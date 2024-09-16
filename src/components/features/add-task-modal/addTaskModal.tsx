@@ -2,11 +2,6 @@
 import { useState } from 'react';
 
 import DescriptionIcon from '@mui/icons-material/Description';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-
-import Image from 'next/image';
-import youDoAddTask from '../../../../public/add-task/Frame 100.svg';
 
 import WorkIcon from '@mui/icons-material/Work';
 import SchoolIcon from '@mui/icons-material/School';
@@ -14,9 +9,9 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 import { useUserData } from '../use-cookies/useUserData';
 import ColorPicker from './ColorPicker';
-import { green } from '@mui/material/colors';
 import Icon from '@/components/ui/Icon';
 import { Button } from '@/components/ui/button';
+import { AddTimeBtn, DeleteTimeBtn } from './AddTimeBtn';
 
 type Task = {
 	id: number;
@@ -58,7 +53,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 	const [isIconPickerOpen, setIsIconPickerOpen] = useState(false); // アイコン選択用のフラグ
 
 	// 時間を分単位に変換して加算する関数
-	const addTime = (timeUnit: TimeUnit) => {
+	const addTime = (timeUnit: string) => {
 		let minutesToAdd = 0;
 		switch (timeUnit) {
 			case '10分':
@@ -69,6 +64,9 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				break;
 			case '1時間':
 				minutesToAdd = 60;
+				break;
+			case '取消':
+				resetForm();
 				break;
 			default:
 				break;
@@ -81,11 +79,6 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		const hours = Math.floor(minutes / 60);
 		const mins = minutes % 60;
 		return `${hours > 0 ? `${hours}時間` : ''}${mins}分`;
-	};
-
-	// 取消ボタンで時間をリセットする
-	const handleCancel = () => {
-		resetForm();
 	};
 
 	// アイコンをレンダリングする関数
@@ -308,30 +301,10 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				</div>
 
 				<div className="flex gap-2 mb-6">
-					<button
-						onClick={() => addTime('10分')}
-						className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-					>
-						10分
-					</button>
-					<button
-						onClick={() => addTime('30分')}
-						className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-					>
-						30分
-					</button>
-					<button
-						onClick={() => addTime('1時間')}
-						className="px-4 py-2 bg-green-200 text-green-600 rounded-full"
-					>
-						1時間
-					</button>
-					<button
-						onClick={handleCancel}
-						className="px-4 py-2 bg-red-400 text-white rounded-full"
-					>
-						取消
-					</button>
+					<AddTimeBtn addTime={addTime} timeUnit="10分" />
+					<AddTimeBtn addTime={addTime} timeUnit="30分" />
+					<AddTimeBtn addTime={addTime} timeUnit="1時間" />
+					<DeleteTimeBtn addTime={addTime} timeUnit="取消" />
 				</div>
 
 				<div className="flex justify-between">

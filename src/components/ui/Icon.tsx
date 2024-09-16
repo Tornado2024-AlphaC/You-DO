@@ -16,7 +16,7 @@ const Icon = ({ iconRoute, iconName, size }: IconProps) => {
 				alt={iconName}
 				width={size}
 				height={size}
-				className="m-2"
+				className="mr-2"
 			/>
 		</div>
 	);
