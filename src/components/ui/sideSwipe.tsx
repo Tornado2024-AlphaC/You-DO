@@ -6,17 +6,14 @@ import { ReactNode } from 'react';
 
 const variants = {
 	hidden: (direction: number) => ({
-		x: direction > 0 ? 1000 : -1000,
 		opacity: 0,
 		transition: { duration: 0.5 },
 	}),
 	enter: {
-		x: 0,
 		opacity: 1,
 		transition: { duration: 0.5 },
 	},
 	exit: (direction: number) => ({
-		x: direction > 0 ? -1000 : 1000,
 		opacity: 0,
 		transition: { duration: 0.5 },
 	}),
@@ -24,21 +21,12 @@ const variants = {
 
 export const SideSwipe = ({ children }: { children: ReactNode }) => {
 	const pathName = usePathname();
-	let direction = 0;
 
-	if (pathName === '/top-task') {
-		direction = 0;
-	} else if (pathName === '/daily-schedule') {
-		direction = -1;
-	} else if (pathName === '/task-list') {
-		direction = 1;
-	}
 	return (
 		// 画面スワイプによる画面遷移アニメーション
 		<AnimatePresence mode="wait">
 			<motion.div
 				key={pathName}
-				custom={direction}
 				variants={variants}
 				initial="hidden"
 				animate="enter"

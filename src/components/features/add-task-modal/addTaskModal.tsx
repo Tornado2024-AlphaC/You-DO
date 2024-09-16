@@ -40,11 +40,7 @@ type IconType =
 	| 'SchoolIcon'
 	| 'FitnessCenterIcon';
 
-interface AddTaskModalProps {
-	closeModal: () => void;
-}
-
-const AddTaskModal: React.FC<AddTaskModalProps> = ({ closeModal }) => {
+const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 	const { getUserData } = useUserData();
 	const user_id = Number(getUserData().user_id);
 
