@@ -134,13 +134,7 @@ const TaskDetail = () => {
 
 	// 時間をリセットする関数
 	const handleCancel = () => {
-		setTotalMinutes(0);
-		setTaskName('');
-		setSelectedIcon('DescriptionIcon');
-		setSelectedColor('bg-green-300');
-		setProgress(50);
-		setDueDate('');
-		setDueTime('');
+		router.push('/task-list');
 	};
 
 	// アイコンをレンダリングする関数
