@@ -48,7 +48,7 @@ export async function GET(_: any, { params }: { params: { user_id: string,displa
 			{ status: 400 }
 		);
 	}
-	const displayNum = Math.floor(Number(params.displayNum));
+	let displayNum = Math.floor(Number(params.displayNum));
 	if (isNaN(displayNum)) {
 		return NextResponse.json(
 			{
@@ -80,6 +80,9 @@ export async function GET(_: any, { params }: { params: { user_id: string,displa
 			});
 		}
 		displayTaskList.sort((a, b) => a.priority - b.priority);
+		if(displayTaskList.length < displayNum){
+			displayNum = displayTaskList.length;
+		}
 		const nextTask = displayTaskList.slice(0, displayNum);
 
 		return NextResponse.json({
