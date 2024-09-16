@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 
 import DescriptionIcon from '@mui/icons-material/Description';
-import ColorLensIcon from '@mui/icons-material/ColorLens';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -22,9 +21,16 @@ type Task = {
 	icon: IconType;
 	color: string;
 	progress: number;
-	dueDate: string;
-	dueTime: string;
+	timestamp: number; // APIで返ってくるtimestamp
 	totalMinutes: number;
+};
+
+// timestampを日付と時間に分ける関数
+const convertTimestampToDateAndTime = (timestamp: number) => {
+  const date = new Date(timestamp * 1000); // 秒単位のtimestampをミリ秒に変換
+  const dueDate = date.toISOString().split('T')[0]; // YYYY-MM-DD形式の文字列を抽出
+  const dueTime = date.toTimeString().split(':').slice(0, 2).join(':'); // HH:MM形式の時間を抽出
+  return { dueDate, dueTime };
 };
 
 const TaskDetail = () => {
@@ -70,8 +76,11 @@ const TaskDetail = () => {
         setSelectedIcon(taskData.icon || 'DescriptionIcon');
         setSelectedColor(taskData.color || 'bg-green-300');
         setProgress(taskData.progress || 50);
-        setDueDate(taskData.dueDate || '');
-        setDueTime(taskData.dueTime || '');
+
+        // タイムスタンプから日付と時間を分割
+        const { dueDate, dueTime } = convertTimestampToDateAndTime(taskData.timestamp);
+        setDueDate(dueDate);
+        setDueTime(dueTime);
       }
     };
 
