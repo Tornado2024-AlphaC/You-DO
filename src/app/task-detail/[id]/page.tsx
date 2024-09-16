@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import DescriptionIcon from '@mui/icons-material/Description';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -43,6 +44,7 @@ const TaskDetail = () => {
 	//パスパラメータに含まれるidを取得する
 	const { id } = useParams();
 	const task_id = id as string;
+	const router = useRouter();
 
 	const [taskName, setTaskName] = useState('');
 	const [totalMinutes, setTotalMinutes] = useState(0);
@@ -96,6 +98,9 @@ const TaskDetail = () => {
 				);
 				setDueDate(dueDate);
 				setDueTime(dueTime);
+			} else {
+				alert('タスク取得中にエラーが発生しました。前のページに戻ります。');
+				router.push('/task-list');
 			}
 		};
 
