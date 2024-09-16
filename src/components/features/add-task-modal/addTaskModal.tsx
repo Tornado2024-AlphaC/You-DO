@@ -15,6 +15,8 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import { useUserData } from '../use-cookies/useUserData';
 import ColorPicker from './ColorPicker';
 import { green } from '@mui/material/colors';
+import Icon from '@/components/ui/Icon';
+import { Button } from '@/components/ui/button';
 
 type Task = {
 	id: number;
@@ -277,7 +279,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				<hr />
 				<div className="flex flex-row gap-3">
 					<p className="text-lg">
-						<EventAvailableIcon />
+						<Icon iconRoute="add-task" iconName="deadline" size={24} />
 					</p>
 					<p className="text-lg">納期を設定</p>
 				</div>
@@ -298,11 +300,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 
 			<div className="p-4">
 				<div className="flex items-center mb-4">
-					<Image
-						src={youDoAddTask}
-						alt="時計アイコン"
-						className="w-8 h-8 mr-2"
-					/>
+					<Icon iconRoute="add-task" iconName="timer" size={24} />
 					<h3 className="text-gray-700 font-medium">所要時間</h3>
 					<span className="text-green-600 ml-auto">
 						{formatTime(total_minutes)}
@@ -337,18 +335,14 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 				</div>
 
 				<div className="flex justify-between">
-					<button
-						onClick={closeModal}
-						className="flex items-center justify-center px-6 py-2 bg-gray-400 text-white rounded-lg"
-					>
-						← 戻る
-					</button>
-					<button
-						className="flex items-center justify-center px-6 py-2 bg-green-400 text-white rounded-lg"
-						onClick={save_task}
-					>
-						＋ タスク追加
-					</button>
+					<Button onClick={closeModal}>
+						<Icon iconRoute="add-task" iconName="back" size={24} />
+						戻る
+					</Button>
+					<Button onClick={save_task}>
+						<Icon iconRoute="icons" iconName="plus" size={24} />
+						タスク追加
+					</Button>
 				</div>
 			</div>
 		</div>
