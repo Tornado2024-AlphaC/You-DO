@@ -166,7 +166,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		});
 	};
 
-	const save_task = () => {
+	const save_task = async () => {
 		if (
 			task_name === '' ||
 			total_minutes === 0 ||
@@ -198,6 +198,49 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 			resetForm();
 		} catch (error) {
 			alert('タスクが登録できませんでした。');
+		}
+
+		
+		try {
+			const response = await fetch(`/api/task/${user_id}/setpriority`, {
+				// APIエンドポイントのパスを指定
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+
+			const data = await response.json();
+			console.log('Success:', data.message);
+		} catch (error) {
+			console.error('Fetch Error:', error);
+		}
+
+		try {
+			const response = await fetch(`/api/task/${user_id}/culcUrgency`, {
+				// APIエンドポイントのパスを指定
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (!response.ok) {
+				const errorResponse = await response.json();
+				console.error('Error:', errorResponse.message);
+				return;
+			}
+
+			const data = await response.json();
+			console.log('Success:', data.result);
+		} catch (error) {
+			console.error('Fetch Error:', error);
 		}
 	};
 
