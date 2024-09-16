@@ -30,6 +30,17 @@ type Task = {
 	updated_at: string;
 };
 
+type Schedule = {
+    id: number;
+    user_id: number;
+    type: string;
+    start_time: string;
+    end_time: string;
+    duration: number;
+    updated_at: string;
+    created_at: string;
+}
+
 const TopTask = () => {
 	const router = useRouter();
 
@@ -38,7 +49,9 @@ const TopTask = () => {
 
 	const [taskList, setTaskList] = React.useState<Task[]>([]);
 	const [topTask, setTopTask] = React.useState<Task | null>(null);
-
+	const [scheduleList, setScheduleList] = React.useState<Schedule[]>([]);
+	const [topSchedule, setTopSchedule] = React.useState<Schedule | null>(null);
+	
 	const handlers = useSwipeable({
 		onSwipedLeft: () => router.push(TaskList),
 		onSwipedRight: () => router.push(DailySchedule),
@@ -82,6 +95,41 @@ const TopTask = () => {
 		});
 	};
 
+	const get_next_schedule = async (user_id: string): Promise<Schedule[]> => {
+		return new Promise((resolve, reject) => {
+			const url = `api/schedule/${user_id}/next-empty`;
+			try {
+				fetch(url, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}).then(async res => {
+					const contentType = res.headers.get('content-type');
+					if (!res.ok) {
+						const statusCode = res.status;
+						if (!contentType || !contentType.includes('application/json')) {
+							throw new Error("Oops, we haven't got JSON!");
+						}
+						switch (statusCode) {
+							case 400:
+								throw new Error('Bad Request');
+							case 500:
+								throw new Error('Internal Server Error');
+							default:
+								throw new Error('Unknown Error');
+						}
+					}
+					const data = await res.json();
+					resolve(data.scheduleList);
+				});
+			} catch (error) {
+				alert('A:スケジュール取得中にエラーが発生しました。');
+				reject(error);
+			}
+		});
+	};
+
 	useEffect(() => {
 		const call_get_next_task_list = async () => {
 			try {
@@ -100,8 +148,27 @@ const TopTask = () => {
 			}
 		};
 
+		const call_get_next_schedule = async () => {
+			try {
+				const scheduleList = await get_next_schedule(user_id);
+				if (!scheduleList) {
+					throw new Error('TaskList is empty');
+				}
+				if (scheduleList.length === 0) {
+					alert('スケジュールがありません。');
+				}
+				setScheduleList(scheduleList);
+				setTopSchedule(scheduleList[0]);
+			} catch (error) {
+				alert('B: スケジュール取得中にエラーが発生しました。');
+				return;
+			}
+		};
+
 		call_get_next_task_list();
+		call_get_next_schedule();
 	}, []);
+	
 	return (
 		<SideSwipe>
 			<main {...handlers}>
