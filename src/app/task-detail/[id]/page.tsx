@@ -76,6 +76,10 @@ const TaskDetail = () => {
 		}
 	};
 
+	const hancleSave = async () => {
+	}
+	
+
 	useEffect(() => {
 		// 初回ロード時にAPIからデータを取得してstateに設定
 		const loadTaskData = async () => {
