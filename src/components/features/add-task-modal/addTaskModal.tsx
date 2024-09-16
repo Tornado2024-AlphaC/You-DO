@@ -13,6 +13,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 import { useUserData } from '../use-cookies/useUserData';
+import ColorPicker from './ColorPicker';
+import { green } from '@mui/material/colors';
 
 type Task = {
 	id: number;
@@ -192,6 +194,16 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		}
 	};
 
+	const COLORS: string[] = [
+		'green',
+		'sky',
+		'blue',
+		'purple',
+		'red',
+		'orange',
+		'yellow',
+	];
+
 	return (
 		<div className="bg-white">
 			<div className="flex justify-between items-center mb-4">
@@ -250,27 +262,17 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 					</div>
 				)}
 				<hr />
-				<div className="flex justify-around py-4">
-					<div
-						onClick={() => setSelectedColor('bg-green-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-green-300' ? 'ring-2 ring-black' : ''} bg-green-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-blue-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-blue-300' ? 'ring-2 ring-black' : ''} bg-blue-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-purple-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-purple-300' ? 'ring-2 ring-black' : ''} bg-purple-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-red-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-red-300' ? 'ring-2 ring-black' : ''} bg-red-300 rounded-full cursor-pointer`}
-					></div>
-					<div
-						onClick={() => setSelectedColor('bg-yellow-300')}
-						className={`w-8 h-8 ${selectedColor === 'bg-yellow-300' ? 'ring-2 ring-black' : ''} bg-yellow-300 rounded-full cursor-pointer`}
-					></div>
+				{/* タスクカラー選択 */}
+				<div className="flex justify-around items-center py-4">
+					{/* map関数でCOLORSの数だけ繰り返し */}
+					{COLORS.map(color => (
+						<ColorPicker
+							key={color}
+							color={color}
+							selectedColor={selectedColor}
+							setSelectedColor={setSelectedColor}
+						/>
+					))}
 				</div>
 				<hr />
 				<div className="flex flex-row gap-3">
