@@ -294,7 +294,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 					<div className="flex items-center justify-between mb-4 w-full">
 						<Icon iconRoute="add-task" iconName="timer" size={24} />
 						<h3 className="text-white-secondary font-medium">所要時間</h3>
-						<span className="text-green-600 ml-auto">
+						<span className="text-green-tertiary ml-auto">
 							{formatTime(total_minutes)}
 						</span>
 					</div>
