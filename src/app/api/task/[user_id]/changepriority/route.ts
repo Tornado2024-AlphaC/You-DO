@@ -1,6 +1,24 @@
 import { NextResponse } from "next/server";
 import spabase from "@/libs/spabase";
 
+type Task = {
+    id: number;
+    user_id: number;
+    title: string;
+    limit_time: string;
+    parent_id: number;
+    available_break: boolean;
+    duration: number;
+    expectation: number;
+    urgency: number;
+    firstexpect: number;
+    progress: number;
+    priority: number;
+    skip_count: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export async function PUT(req:any, { params }:any) {
     const userId = Number(params.user_id);
 
@@ -44,16 +62,10 @@ export async function PUT(req:any, { params }:any) {
         // タスクの優先度を再計算
         const displayNum : number = (selectedTasks.length > 5 )? 5 : selectedTasks.length;//とりあえず5個まで表示
         selectedTasks.sort((a:any,b:any) => a.priority - b.priority);
-
-        for (let i = 1; i <= displayNum; i++){
-            if(i==1){
-                selectedTasks[0].priority = displayNum;
-            }
-            else{
-                selectedTasks[i-1].priority -= 1;
-            }
-        }
-        const updatePromises = selectedTasks.map((task:any, index:number) => {
+        const sortedTasks =[...selectedTasks];
+        sortedTasks.sort((a:any,b:any) => new Date(a.limit_time).getTime() - new Date(b.limit_time).getTime());
+        
+        const updatePromises = priotitySort(sortedTasks,selectedTasks,displayNum).map((task:any, index:number) => {
             // 各タスクに順位を設定 (最も早い締切が優先度1)
             return spabase
                 .from("sample-Task")
@@ -68,7 +80,7 @@ export async function PUT(req:any, { params }:any) {
         // 成功
         return NextResponse.json({
             status: 200,
-            message: "タスクの優先度が更新されました"
+            message: "Success",
         }, { status: 200 });
 
     } catch (error) {
@@ -77,5 +89,28 @@ export async function PUT(req:any, { params }:any) {
             message: "サーバーエラーが発生しました",
             error: error 
         }, { status: 500 });
+    }
+}
+
+function priotitySort(sortedTasks:Task[], selectedTasks:Task[],displayNum:number){
+    let targetNum : number = 0;
+    for(let i = 0; i < displayNum; i++){
+        if(sortedTasks[i].id == selectedTasks[0].id){
+           targetNum = i;
+        }
+    }
+    if (targetNum === displayNum-1){
+        for(let j =0; j < displayNum; j++){
+            sortedTasks[j].priority = j+1;
+        }
+          
+          return sortedTasks;
+    }
+    else{
+       for(let j =0; j <= targetNum; j++){
+           sortedTasks[j].priority = j+2;
+       }
+         sortedTasks[targetNum+1].priority = 1;
+         return sortedTasks;
     }
 }
