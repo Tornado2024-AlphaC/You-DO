@@ -55,7 +55,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 	);
 	const [selected_time, set_selected_time] = useState('23:59');
 	const [selectedIcon, setSelectedIcon] = useState<IconType>('DescriptionIcon'); // デフォルトアイコン
-	const [selectedColor, setSelectedColor] = useState('bg-green-300'); // デフォルト色
+	const [selectedColor, setSelectedColor] = useState('green'); // デフォルト色
 	const [isIconPickerOpen, setIsIconPickerOpen] = useState(false); // アイコン選択用のフラグ
 
 	// 時間を分単位に変換して加算する関数
@@ -122,7 +122,7 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 		limit_time: string,
 		expectation: number,
 		color: string,
-		icon:string
+		icon: string
 	): Promise<Task> => {
 		return new Promise((resolve, reject) => {
 			const url = 'api/task';
@@ -200,7 +200,6 @@ const AddTaskModal = ({ closeModal }: { closeModal: () => void }) => {
 			alert('タスクが登録できませんでした。');
 		}
 
-		
 		try {
 			const response = await fetch(`/api/task/${user_id}/setpriority`, {
 				// APIエンドポイントのパスを指定
