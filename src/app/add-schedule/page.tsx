@@ -3,8 +3,11 @@
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { useState } from 'react';
 
+import { format, set } from 'date-fns';
+
 import { useRouter } from 'next/navigation';
 import { useUserData } from '@/components/features/use-cookies/useUserData';
+import { get } from 'http';
 
 type Schedule = {
 	id: number;
@@ -22,16 +25,45 @@ const PostSchedule = () => {
 	const { getUserData } = useUserData();
 	const user_id = Number(getUserData().user_id);
 
+	//timestampから、時間のみを取得する関数
+	const getTime = (timestamp: string) => {
+		const date = new Date(timestamp);
+		return format(date, 'HH:mm');
+	};
+
+	//timestampから、日付のみを取得する関数
+	const getDate = (timestamp: string) => {
+		const date = new Date(timestamp);
+		return format(date, 'yyyy-MM-dd');
+	};
+
+	const now1 = new Date();
+	const now2 = new Date();
+	now1.setHours(now1.getHours() + 1); // 1時間を追加
+	now1.setMinutes(0); // 分を0にリセット
+	const startDefault = now1;
+	now2.setHours(now2.getHours() + 1); // 1時間を追加
+	now2.setMinutes(30); // 分を30にリセット
+	const endDefault = now2;
+
 	//開始時間を管理
-	const [startDate, setStartDate] = useState('');
-	const [startTime, setStartTime] = useState('');
+	const [startDate, setStartDate] = useState(
+		getDate(startDefault.toISOString())
+	);
+	const [startTime, setStartTime] = useState(
+		getTime(startDefault.toISOString())
+	);
 	//終了時間を管理
-	const [endDate, setEndDate] = useState('');
-	const [endTime, setEndTime] = useState('');
+	const [endDate, setEndDate] = useState(getDate(endDefault.toISOString()));
+	const [endTime, setEndTime] = useState(getTime(endDefault.toISOString()));
 
 	// 時間をリセットする関数
 	const handleCancel = () => {
 		router.push('/daily-schedule');
+	};
+
+	const handleClear = () => {
+		resetForm();
 	};
 
 	const save_schedule = async (
@@ -94,10 +126,18 @@ const PostSchedule = () => {
 	};
 
 	const resetForm = () => {
-		setStartDate('');
-		setStartTime('');
-		setEndDate('');
-		setEndTime('');
+		const now1 = new Date();
+		const now2 = new Date();
+		now1.setHours(now1.getHours() + 1); // 1時間を追加
+		now1.setMinutes(0); // 分を0にリセット
+		const startDefault = now1;
+		now2.setHours(now2.getHours() + 1); // 1時間を追加
+		now2.setMinutes(30); // 分を30にリセット
+		const endDefault = now2;
+		setStartDate(getDate(startDefault.toISOString()));
+		setStartTime(getTime(startDefault.toISOString()));
+		setEndDate(getDate(endDefault.toISOString()));
+		setEndTime(getTime(endDefault.toISOString()));
 	};
 
 	return (
@@ -155,7 +195,7 @@ const PostSchedule = () => {
 					キャンセル
 				</button>
 				<button
-					onClick={handleCancel}
+					onClick={handleClear}
 					className="px-4 py-2 bg-red-200 text-red-600 rounded-full"
 				>
 					クリア
